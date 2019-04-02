@@ -21,7 +21,9 @@ module OneRoster
 
           raise "Failed to fetch #{path}" unless response.success?
 
-          body.each { |item| yielder << @type.new(item) } if body.any?
+          if body.any?
+            body.each { |item| yielder << @type.new(item) unless item.status == 'tobedeleted' }
+          end
 
           raise StopIteration if body.length < PAGE_LIMIT
 
@@ -40,7 +42,7 @@ module OneRoster
       @offset + PAGE_LIMIT
     end
 
-    def request(path = @path, offset)
+    def request(path, offset)
       @connection.execute(path, @method, limit: PAGE_LIMIT, offset: offset)
     end
   end
