@@ -1,0 +1,27 @@
+module OneRoster
+  class Response
+    attr_reader :status, :raw_body
+
+    attr_accessor :body
+
+    def initialize(faraday_response)
+      @status = faraday_response.status
+      @raw_body = faraday_response.body
+      @type = resource_type(faraday_response)
+
+      return unless faraday_response.body
+
+      @body = faraday_response.body[@type]
+    end
+
+    def success?
+      @status == 200
+    end
+
+    private
+
+    def resource_type(faraday_response)
+      RESPONSE_TYPE_MAP[faraday_response.env.url.path.split('/').last]
+    end
+  end
+end
