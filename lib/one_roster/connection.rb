@@ -7,17 +7,11 @@ module OneRoster
       @client = client
     end
 
-    def execute(resource_type, method = :get, params = nil, body = nil)
-      path = request_path(resource_type)
-
+    def execute(path, method = :get, params = nil, body = nil)
       Response.new(raw_request(path, method, params, body))
     end
 
     private
-
-    def request_path(resource_type)
-      "ims/oneroster/v1p1/#{resource_type}"
-    end
 
     def connection
       return @connection if @connection
