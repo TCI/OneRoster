@@ -29,8 +29,7 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'authentication' do
-    let(:mock_response) { OneRoster::Response.new(stub(body: auth_body, status: status, env: response_env)) }
-    before { client.connection.expects(:execute).with(endpoint, :get, limit: 1).returns(mock_response) }
+    before { client.connection.expects(:execute).with(endpoint, :get, limit: 1).returns(auth_response) }
 
     context 'successful authentication' do
       it 'sets authenticated status' do
@@ -44,6 +43,43 @@ RSpec.describe OneRoster::Client do
       it 'raises error' do
         expect { client.authenticate }.to raise_error(OneRoster::ConnectionError)
       end
+    end
+  end
+
+  xdescribe 'students' do
+
+  end
+
+  describe 'teachers' do
+    before do
+      client.connection.expects(:execute)
+        .with(endpoint, :get, limit: 1)
+        .returns(auth_response)
+      client.connection.expects(:execute)
+        .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
+        .returns(teachers_response)
+    end
+
+    it 'authenticates and returns active teachers' do
+      response = client.teachers
+      expect(client.authenticated).to be(true)
+
+      first_teacher = response[0]
+      second_teacher = response[1]
+
+      expect(first_teacher).to be_a(OneRoster::Types::Teacher)
+      expect(first_teacher.id).to eq(teacher_1['sourcedId'])
+      expect(first_teacher.email).to eq(teacher_1['email'])
+      expect(first_teacher.first_name).to eq(teacher_1['givenName'])
+      expect(first_teacher.last_name).to eq(teacher_1['familyName'])
+      expect(first_teacher.status).to eq(teacher_1['status'])
+
+      expect(second_teacher).to be_a(OneRoster::Types::Teacher)
+      expect(second_teacher.id).to eq(teacher_3['sourcedId'])
+      expect(second_teacher.email).to eq(teacher_3['email'])
+      expect(second_teacher.first_name).to eq(teacher_3['givenName'])
+      expect(second_teacher.last_name).to eq(teacher_3['familyName'])
+      expect(second_teacher.status).to eq(teacher_3['status'])
     end
   end
 end

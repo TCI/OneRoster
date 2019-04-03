@@ -22,7 +22,7 @@ module OneRoster
           raise "Failed to fetch #{path}" unless response.success?
 
           if body.any?
-            body.each { |item| yielder << @type.new(item) unless item.status == 'tobedeleted' }
+            body.each { |item| yielder << @type.new(item) unless item['status'] == 'tobedeleted' }
           end
 
           raise StopIteration if body.length < PAGE_LIMIT
