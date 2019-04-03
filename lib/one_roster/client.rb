@@ -17,12 +17,13 @@ module OneRoster
       client
     end
 
-    %i[teachers students].each do |record_type|
+    %i[students teachers].each do |record_type|
       define_method(record_type) do |record_ids = []|
-        authenticate unless @authenticated
+        authenticate
 
         endpoint = OneRoster.const_get("#{record_type.upcase}_ENDPOINT")
-        type = Types.const_get(record_type.to_s.capitalize[0..-2])
+
+        type = Types.const_get(Dry::Inflector.new.singularize(record_type.to_s.capitalize))
 
         records = Paginator.fetch(connection, endpoint, :get, type).force
 
@@ -33,6 +34,8 @@ module OneRoster
     end
 
     def authenticate
+      return if authenticated?
+
       response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
 
       raise ConnectionError unless response.success?
