@@ -119,6 +119,9 @@ RSpec.shared_context 'api responses' do
       'sourcedId' => 'class_1',
       'course' => { 'sourcedId' => course_1['sourcedId'] },
       'status' => 'active',
+      'title' => 'SOC STUDIES 3 - B. julez',
+      'periods' => %w(1 2),
+      'grades' => %w(04 05),
       'junk' => 'data'
     }
   end
@@ -128,6 +131,9 @@ RSpec.shared_context 'api responses' do
       'sourcedId' => 'class_2',
       'course' => { 'sourcedId' => course_2['sourcedId'] },
       'status' => 'tobedeleted',
+      'title' => 'PROGRAMMING',
+      'periods' => ['PROGRAMMING - Period 2 - Julius'],
+      'grades' => %w(06),
       'junk' => 'data'
     }
   end
@@ -137,6 +143,9 @@ RSpec.shared_context 'api responses' do
       'sourcedId' => 'class_3',
       'course' => { 'sourcedId' => course_3['sourcedId'] },
       'status' => 'active',
+      'title' => 'meme studies 3 - b. julez',
+      'classCode' => 'meme studies 3 - Period 3 - Julius',
+      'grades' => %w(01 02 03),
       'junk' => 'data'
     }
   end

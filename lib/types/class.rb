@@ -4,14 +4,30 @@ module OneRoster
   module Types
     class Class < Base
       attr_reader :id,
+                  :title,
                   :course_id,
-                  :provider
+                  :provider,
+                  :period,
+                  :grades
 
       def initialize(attributes = {})
         @id         = attributes['sourcedId']
+        @title      = attributes['title'].split(' ').map(&:capitalize).join(' ')
         @course_id  = attributes['course']['sourcedId']
         @status     = attributes['status']
+        @period     = first_period(attributes) || period_from_code(attributes)
+        @grades     = attributes['grades']
         @provider   = 'oneroster'
+      end
+
+      private
+
+      def first_period(attributes)
+        attributes['periods']&.first
+      end
+
+      def period_from_code(attributes)
+        attributes['classCode']&.match(/- Period (\d+) -/) { |m| m[1] }
       end
     end
   end

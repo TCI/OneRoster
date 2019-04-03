@@ -110,6 +110,7 @@ RSpec.describe OneRoster::Client do
       mock_authentication
       mock_request(OneRoster::CLASSES_ENDPOINT, classes_response)
     end
+
     it 'authenticates and returns classes' do
       response = client.classes
       expect(client.authenticated?).to be(true)
@@ -119,12 +120,18 @@ RSpec.describe OneRoster::Client do
 
       expect(first_class).to be_a(OneRoster::Types::Class)
       expect(first_class.id).to eq(class_1['sourcedId'])
+      expect(first_class.title).to eq('Soc Studies 3 - B. Julez')
       expect(first_class.course_id).to eq(class_1['course']['sourcedId'])
+      expect(first_class.period).to eq('1')
+      expect(first_class.grades).to eq(class_1['grades'])
       expect(first_class.provider).to eq('oneroster')
 
       expect(second_class).to be_a(OneRoster::Types::Class)
       expect(second_class.id).to eq(class_3['sourcedId'])
+      expect(second_class.title).to eq('Meme Studies 3 - B. Julez')
       expect(second_class.course_id).to eq(class_3['course']['sourcedId'])
+      expect(second_class.period).to eq('3')
+      expect(second_class.grades).to eq(class_3['grades'])
       expect(second_class.provider).to eq('oneroster')
     end
 
