@@ -12,7 +12,7 @@ module OneRoster
 
       def initialize(attributes = {})
         @id         = attributes['sourcedId']
-        @title      = attributes['title'].split(' ').map(&:capitalize).join(' ')
+        @title      = capitalize(attributes['title'])
         @course_id  = attributes['course']['sourcedId']
         @status     = attributes['status']
         @period     = first_period(attributes) || period_from_code(attributes)
@@ -21,6 +21,10 @@ module OneRoster
       end
 
       private
+
+      def capitalize(string)
+        string.split(' ').map(&:capitalize).join(' ')
+      end
 
       def first_period(attributes)
         attributes['periods']&.first

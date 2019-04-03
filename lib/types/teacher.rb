@@ -7,7 +7,6 @@ module OneRoster
                   :email,
                   :first_name,
                   :last_name,
-                  :status,
                   :provider
 
       def initialize(attributes = {})
@@ -15,7 +14,6 @@ module OneRoster
         @email      = attributes['email']
         @first_name = attributes['givenName']
         @last_name  = attributes['familyName']
-        @status     = attributes['status']
         @provider   = 'oneroster'
       end
     end

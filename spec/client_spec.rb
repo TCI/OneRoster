@@ -61,7 +61,6 @@ RSpec.describe OneRoster::Client do
       expect(first_student.first_name).to eq(student_1['givenName'])
       expect(first_student.last_name).to eq(student_1['familyName'])
       expect(first_student.username).to eq(student_1['username'])
-      expect(first_student.status).to eq(student_1['status'])
       expect(first_student.provider).to eq('oneroster')
 
       expect(second_student).to be_a(OneRoster::Types::Student)
@@ -69,7 +68,6 @@ RSpec.describe OneRoster::Client do
       expect(second_student.first_name).to eq(student_3['givenName'])
       expect(second_student.last_name).to eq(student_3['familyName'])
       expect(second_student.username).to eq(student_3['username'])
-      expect(second_student.status).to eq(student_3['status'])
       expect(second_student.provider).to eq('oneroster')
     end
   end
@@ -92,7 +90,6 @@ RSpec.describe OneRoster::Client do
       expect(first_teacher.email).to eq(teacher_1['email'])
       expect(first_teacher.first_name).to eq(teacher_1['givenName'])
       expect(first_teacher.last_name).to eq(teacher_1['familyName'])
-      expect(first_teacher.status).to eq(teacher_1['status'])
       expect(first_teacher.provider).to eq('oneroster')
 
       expect(second_teacher).to be_a(OneRoster::Types::Teacher)
@@ -100,7 +97,6 @@ RSpec.describe OneRoster::Client do
       expect(second_teacher.email).to eq(teacher_3['email'])
       expect(second_teacher.first_name).to eq(teacher_3['givenName'])
       expect(second_teacher.last_name).to eq(teacher_3['familyName'])
-      expect(second_teacher.status).to eq(teacher_3['status'])
       expect(second_teacher.provider).to eq('oneroster')
     end
   end
@@ -190,7 +186,6 @@ RSpec.describe OneRoster::Client do
         expect(third_course.course_code).to eq(course_4['courseCode'])
         expect(third_course.provider).to eq('oneroster')
       end
-
     end
   end
 
@@ -200,24 +195,70 @@ RSpec.describe OneRoster::Client do
       mock_request(OneRoster::ENROLLMENTS_ENDPOINT, enrollments_response)
     end
 
-    it 'authenticates and returns enrollments' do
-      response = client.enrollments
-      expect(client.authenticated?).to be(true)
+    context 'without classroom_ids passed in' do
+      it 'authenticates and returns enrollments' do
+        response = client.enrollments
+        expect(client.authenticated?).to be(true)
 
-      first_enrollment  = response[0]
-      second_enrollment = response[1]
+        expect(response[:teacher].length).to eq(2)
+        expect(response[:student].length).to eq(1)
 
-      expect(first_enrollment).to be_a(OneRoster::Types::Enrollment)
-      expect(first_enrollment.id).to eq(enrollment_1['sourcedId'])
-      expect(first_enrollment.classroom_id).to eq(enrollment_1['class']['sourcedId'])
-      expect(first_enrollment.user_id).to eq(enrollment_1['user']['sourcedId'])
-      expect(first_enrollment.provider).to eq('oneroster')
+        teacher_enrollment1 = response[:teacher][0]
+        teacher_enrollment2 = response[:teacher][1]
+        student_enrollment = response[:student][0]
 
-      expect(second_enrollment).to be_a(OneRoster::Types::Enrollment)
-      expect(second_enrollment.id).to eq(enrollment_2['sourcedId'])
-      expect(second_enrollment.classroom_id).to eq(enrollment_2['class']['sourcedId'])
-      expect(second_enrollment.user_id).to eq(enrollment_2['user']['sourcedId'])
-      expect(second_enrollment.provider).to eq('oneroster')
+        expect(teacher_enrollment1).to be_a(OneRoster::Types::Enrollment)
+        expect(teacher_enrollment1.id).to eq(enrollment_1['sourcedId'])
+        expect(teacher_enrollment1.classroom_id).to eq(enrollment_1['class']['sourcedId'])
+        expect(teacher_enrollment1.user_id).to eq(enrollment_1['user']['sourcedId'])
+        expect(teacher_enrollment1.role).to eq(enrollment_1['role'])
+        expect(teacher_enrollment1.teacher?).to be(true)
+        expect(teacher_enrollment1.student?).to be(false)
+        expect(teacher_enrollment1.primary_teacher?).to be(true)
+        expect(teacher_enrollment1.provider).to eq('oneroster')
+
+        expect(teacher_enrollment2).to be_a(OneRoster::Types::Enrollment)
+        expect(teacher_enrollment2.id).to eq(enrollment_4['sourcedId'])
+        expect(teacher_enrollment2.classroom_id).to eq(enrollment_4['class']['sourcedId'])
+        expect(teacher_enrollment2.user_id).to eq(enrollment_4['user']['sourcedId'])
+        expect(teacher_enrollment2.role).to eq(enrollment_4['role'])
+        expect(teacher_enrollment2.teacher?).to be(true)
+        expect(teacher_enrollment2.student?).to be(false)
+        expect(teacher_enrollment2.primary_teacher?).to be(true)
+        expect(teacher_enrollment2.provider).to eq('oneroster')
+
+        expect(student_enrollment).to be_a(OneRoster::Types::Enrollment)
+        expect(student_enrollment.id).to eq(enrollment_6['sourcedId'])
+        expect(student_enrollment.classroom_id).to eq(enrollment_6['class']['sourcedId'])
+        expect(student_enrollment.user_id).to eq(enrollment_6['user']['sourcedId'])
+        expect(student_enrollment.role).to eq(enrollment_6['role'])
+        expect(student_enrollment.teacher?).to be(false)
+        expect(student_enrollment.primary_teacher?).to be(false)
+        expect(student_enrollment.student?).to be(true)
+        expect(student_enrollment.provider).to eq('oneroster')
+      end
+    end
+
+    context 'with classroom_ids passed in' do
+      it 'authenticates and only returns enrollments with classrooms in classroom_ids' do
+        response = client.enrollments([class_1['sourcedId']])
+        expect(client.authenticated?).to be(true)
+
+        expect(response[:teacher].length).to eq(1)
+        expect(response[:student].length).to eq(0)
+
+        teacher_enrollment = response[:teacher][0]
+
+        expect(teacher_enrollment).to be_a(OneRoster::Types::Enrollment)
+        expect(teacher_enrollment.id).to eq(enrollment_1['sourcedId'])
+        expect(teacher_enrollment.classroom_id).to eq(enrollment_1['class']['sourcedId'])
+        expect(teacher_enrollment.user_id).to eq(enrollment_1['user']['sourcedId'])
+        expect(teacher_enrollment.role).to eq(enrollment_1['role'])
+        expect(teacher_enrollment.teacher?).to be(true)
+        expect(teacher_enrollment.student?).to be(false)
+        expect(teacher_enrollment.primary_teacher?).to be(true)
+        expect(teacher_enrollment.provider).to eq('oneroster')
+      end
     end
   end
 end

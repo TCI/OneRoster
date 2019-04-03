@@ -89,26 +89,83 @@ RSpec.shared_context 'api responses' do
   end
 
   ################################### ENROLLMENTS RESPONSE ##################################
+  # enrollment_1: teacher_1 (primary)     in class 1 => valid
+  # enrollment_2: student_1 (tobedeleted) in class_1 => invalid
+  # enrollment_3: teacher_3 (not primary) in class_1 => invalid
+  # enrollment_4: teacher_1 (primary)     in class_2 => valid
+  # enrollment_5: student_2 (tobedeleted) in class_2 => invalid
+  # enrollment_6: student_3               in class_2 => valid
+
   let(:enrollment_1) do
     {
       'sourcedId' => 'enrollment_1',
-      'class' => { 'sourcedId' => class_1['sourcedId'] },
-      'user' => { 'sourcedId' => teacher_1['sourcedId'] },
-      'junk' => 'data'
+      'class'     => { 'sourcedId' => class_1['sourcedId'] },
+      'user'      => { 'sourcedId' => teacher_1['sourcedId'] },
+      'role'      => 'teacher',
+      'primary'   => true,
+      'junk'      => 'data'
     }
   end
 
   let(:enrollment_2) do
     {
       'sourcedId' => 'enrollment_2',
-      'class' => { 'sourcedId' => class_2['sourcedId'] },
-      'user' => { 'sourcedId' => teacher_2['sourcedId'] },
-      'junk' => 'data'
+      'class'     => { 'sourcedId' => class_1['sourcedId'] },
+      'user'      => { 'sourcedId' => student_1['sourcedId'] },
+      'role'      => 'student',
+      'status'    => 'tobedeleted',
+      'junk'      => 'data'
+    }
+  end
+
+  let(:enrollment_3) do
+    {
+      'sourcedId' => 'enrollment_3',
+      'class'     => { 'sourcedId' => class_1['sourcedId'] },
+      'user'      => { 'sourcedId' => teacher_3['sourcedId'] },
+      'role'      => 'teacher',
+      'primary'   => 'false',
+      'junk'      => 'data'
+    }
+  end
+
+  let(:enrollment_4) do
+    {
+      'sourcedId' => 'enrollment_4',
+      'class'     => { 'sourcedId' => class_2['sourcedId'] },
+      'user'      => { 'sourcedId' => teacher_1['sourcedId'] },
+      'role'      => 'teacher',
+      'primary'   => 'true',
+      'junk'      => 'data'
+    }
+  end
+
+  let(:enrollment_5) do
+    {
+      'sourcedId' => 'enrollment_5',
+      'class'     => { 'sourcedId' => class_2['sourcedId'] },
+      'user'      => { 'sourcedId' => student_2['sourcedId'] },
+      'role'      => 'student',
+      'status'    => 'tobedeleted',
+      'primary'   => 'true',
+      'junk'      => 'data'
+    }
+  end
+
+  let(:enrollment_6) do
+    {
+      'sourcedId' => 'enrollment_6',
+      'class'     => { 'sourcedId' => class_2['sourcedId'] },
+      'user'      => { 'sourcedId' => student_3['sourcedId'] },
+      'role'      => 'student',
+      'junk'      => 'data'
     }
   end
 
   let(:enrollments_response_url) { stub(path: OneRoster::ENROLLMENTS_ENDPOINT) }
-  let(:enrollments_body) { { 'enrollments' => [enrollment_1, enrollment_2] } }
+  let(:enrollments_body) do
+    { 'enrollments' => [enrollment_1, enrollment_2, enrollment_3, enrollment_4, enrollment_5, enrollment_6] }
+  end
   let(:enrollments_response) do
     OneRoster::Response.new(stub(body: enrollments_body, status: status, env: stub(url: enrollments_response_url)))
   end

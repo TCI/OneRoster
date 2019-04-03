@@ -7,7 +7,6 @@ module OneRoster
                   :first_name,
                   :last_name,
                   :username,
-                  :status,
                   :provider
 
       def initialize(attributes = {})

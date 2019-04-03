@@ -29,13 +29,15 @@ module OneRoster
 
         return records if record_ids.empty?
 
-        records.reject { |record| record_ids.exclude?(record.id) }
+        records.select { |record| record_ids.include?(record.id) }
       end
     end
 
     # course codes come from mapped_programs.course_number
-    def courses(course_codes = [])
-      class_course_numbers = classes.map(&:course_id)
+    def courses(course_codes = [], oneroster_classes = classes)
+      authenticate
+
+      class_course_numbers = oneroster_classes.map(&:course_id)
 
       courses = Paginator.fetch(connection, COURSES_ENDPOINT, :get, Types::Course).force
 
@@ -48,11 +50,11 @@ module OneRoster
     def enrollments(classroom_ids = [])
       authenticate
 
-      enrollments = Paginator.fetch(connection, ENROLLMENTS_ENDPOINT, :get, Types::Enrollment).force
+      enrollments = parse_enrollments(classroom_ids)
 
-      return enrollments if classroom_ids.empty?
+      p "Found #{enrollments.values.flatten.length} enrollments."
 
-      enrollments.reject { |enrollment| classroom_ids.exclude?(enrollment.classroom_id) }
+      enrollments
     end
 
     def authenticate
@@ -71,6 +73,18 @@ module OneRoster
 
     def connection
       @connection ||= Connection.new(self)
+    end
+
+    private
+
+    def parse_enrollments(classroom_ids)
+      enrollments = Paginator.fetch(connection, ENROLLMENTS_ENDPOINT, :get, Types::Enrollment).force
+
+      enrollments.each_with_object(teacher: [], student: []) do |enrollment, enrollments|
+        next if classroom_ids.any? && !classroom_ids.include?(enrollment.classroom_id)
+
+        enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?
+      end
     end
   end
 end
