@@ -33,6 +33,21 @@ module OneRoster
       end
     end
 
+    def enrollments(classroom_ids = [])
+      authenticate
+
+      enrollments = Paginator.fetch(
+        connection,
+        OneRoster::ENROLLMENTS_ENDPOINT,
+        :get,
+        Types::Enrollment
+      ).force
+
+      return enrollments if classroom_ids.empty?
+
+      enrollments.reject { |enrollment| classroom_ids.exclude?(enrollment.classroom_id) }
+    end
+
     def authenticate
       return if authenticated?
 

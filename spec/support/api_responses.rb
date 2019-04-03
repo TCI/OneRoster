@@ -4,7 +4,7 @@ RSpec.shared_context 'api responses' do
   #################################### TEACHERS RESPONSE ####################################
   let(:teacher_1) do
     {
-      'sourcedId'  => '1',
+      'sourcedId'  => 't1',
       'email'      => 'goodteacher@gmail.com',
       'givenName'  => 'good',
       'familyName' => 'teacher',
@@ -15,7 +15,7 @@ RSpec.shared_context 'api responses' do
 
   let(:teacher_2) do
     {
-      'sourcedId'  => '2',
+      'sourcedId'  => 't2',
       'email'      => 'badteacher@gmail.com',
       'givenName'  => 'bad',
       'familyName' => 'teacher',
@@ -26,7 +26,7 @@ RSpec.shared_context 'api responses' do
 
   let(:teacher_3) do
     {
-      'sourcedId'  => '2',
+      'sourcedId'  => 't3',
       'email'      => 'avgteacher@gmail.com',
       'givenName'  => 'average',
       'familyName' => 'teacher',
@@ -49,7 +49,7 @@ RSpec.shared_context 'api responses' do
   #################################### STUDENTS RESPONSE ####################################
   let(:student_1) do
     {
-      'sourcedId'  => '1',
+      'sourcedId'  => 's1',
       'givenName'  => 'good',
       'familyName' => 'student',
       'username'   => 'coolkid1',
@@ -60,7 +60,7 @@ RSpec.shared_context 'api responses' do
 
   let(:student_2) do
     {
-      'sourcedId'  => '2',
+      'sourcedId'  => 's2',
       'givenName'  => 'bad',
       'familyName' => 'student',
       'username'   => 'badkid1',
@@ -71,7 +71,7 @@ RSpec.shared_context 'api responses' do
 
   let(:student_3) do
     {
-      'sourcedId'  => '3',
+      'sourcedId'  => 's3',
       'givenName'  => 'average',
       'familyName' => 'student',
       'username'   => 'mehkid1',
@@ -83,5 +83,29 @@ RSpec.shared_context 'api responses' do
   let(:students_body) { { 'users' => [student_1, student_2, student_3] } }
   let(:students_response) do
     OneRoster::Response.new(stub(body: students_body, status: status, env: response_env))
+  end
+
+  ################################### ENROLLMENTS RESPONSE ##################################
+  let(:enrollment_1) do
+    {
+      'sourcedId' => '1',
+      'class' => { 'sourcedId' => '1' }, # change to class ID when implementing
+      'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+      'junk' => 'data'
+    }
+  end
+
+  let(:enrollment_2) do
+    {
+      'sourcedId' => '2',
+      'class' => { 'sourcedId' => '2' }, # change to class ID when implementing
+      'user' => { 'sourcedId' => teacher_2['sourcedId'] },
+      'junk' => 'data'
+    }
+  end
+
+  let(:enrollments_body) { { 'enrollments' => [enrollment_1, enrollment_2] } }
+  let(:enrollments_response) do
+    OneRoster::Response.new(stub(body: enrollments_body, status: status, env: response_env))
   end
 end

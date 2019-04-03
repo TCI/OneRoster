@@ -29,7 +29,7 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'authentication' do
-    before { client.connection.expects(:execute).with(endpoint, :get, limit: 1).returns(auth_response) }
+    before { mock_authentication }
 
     context 'successful authentication' do
       it 'sets authenticated status' do
@@ -48,20 +48,13 @@ RSpec.describe OneRoster::Client do
 
   describe 'students' do
     let(:endpoint) { OneRoster::STUDENTS_ENDPOINT }
-    before do
-      client.connection.expects(:execute)
-        .with(OneRoster::TEACHERS_ENDPOINT, :get, limit: 1)
-        .returns(auth_response)
-      client.connection.expects(:execute)
-        .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
-        .returns(students_response)
-    end
+    before { mock_requests(endpoint, students_response) }
 
     it 'authenticate and returns active students' do
       response = client.students
       expect(client.authenticated?).to be(true)
 
-      first_student = response[0]
+      first_student  = response[0]
       second_student = response[1]
 
       expect(first_student).to be_a(OneRoster::Types::Student)
@@ -83,20 +76,14 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'teachers' do
-    before do
-      client.connection.expects(:execute)
-        .with(endpoint, :get, limit: 1)
-        .returns(auth_response)
-      client.connection.expects(:execute)
-        .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
-        .returns(teachers_response)
-    end
+    let(:endpoint) { OneRoster::TEACHERS_ENDPOINT }
+    before { mock_requests(endpoint, teachers_response) }
 
     it 'authenticates and returns active teachers' do
       response = client.teachers
       expect(client.authenticated?).to be(true)
 
-      first_teacher = response[0]
+      first_teacher  = response[0]
       second_teacher = response[1]
 
       expect(first_teacher).to be_a(OneRoster::Types::Teacher)
@@ -114,6 +101,34 @@ RSpec.describe OneRoster::Client do
       expect(second_teacher.last_name).to eq(teacher_3['familyName'])
       expect(second_teacher.status).to eq(teacher_3['status'])
       expect(second_teacher.provider).to eq('oneroster')
+    end
+  end
+
+  xdescribe 'classes' do
+
+  end
+
+  describe 'enrollments' do
+    let(:endpoint) { OneRoster::ENROLLMENTS_ENDPOINT }
+    before { mock_requests(endpoint, enrollments_response) }
+    it 'authenticates and returns enrollments' do
+      response = client.enrollments
+      expect(client.authenticated?).to be(true)
+
+      first_enrollment  = response[0]
+      second_enrollment = response[1]
+
+      expect(first_enrollment).to be_a(OneRoster::Types::Enrollment)
+      expect(first_enrollment.id).to eq(enrollment_1['sourcedId'])
+      expect(first_enrollment.classroom_id).to eq(enrollment_1['class']['sourcedId'])
+      expect(first_enrollment.user_id).to eq(enrollment_1['user']['sourcedId'])
+      expect(first_enrollment.provider).to eq('oneroster')
+
+      expect(second_enrollment).to be_a(OneRoster::Types::Enrollment)
+      expect(second_enrollment.id).to eq(enrollment_2['sourcedId'])
+      expect(second_enrollment.classroom_id).to eq(enrollment_2['class']['sourcedId'])
+      expect(second_enrollment.user_id).to eq(enrollment_2['user']['sourcedId'])
+      expect(second_enrollment.provider).to eq('oneroster')
     end
   end
 end
