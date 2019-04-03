@@ -15,6 +15,7 @@ require 'one_roster/response'
 require 'one_roster/version'
 
 require 'types/base'
+require 'types/course'
 require 'types/class'
 require 'types/enrollment'
 require 'types/student'

@@ -10,6 +10,7 @@ module OneRoster
       def initialize(attributes = {})
         @id         = attributes['sourcedId']
         @course_id  = attributes['course']['sourcedId']
+        @status     = attributes['status']
         @provider   = 'oneroster'
       end
     end

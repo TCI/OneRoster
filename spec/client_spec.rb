@@ -9,9 +9,6 @@ RSpec.describe OneRoster::Client do
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
   let(:status) { 200 }
-  let(:endpoint) { OneRoster::TEACHERS_ENDPOINT }
-  let(:response_url) { stub(path: endpoint) }
-  let(:response_env) { stub(url: response_url) }
 
   let(:client) do
     OneRoster::Client.configure do |config|
@@ -47,8 +44,10 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'students' do
-    let(:endpoint) { OneRoster::STUDENTS_ENDPOINT }
-    before { mock_requests(endpoint, students_response) }
+    before do
+      mock_authentication
+      mock_request(OneRoster::STUDENTS_ENDPOINT, students_response)
+    end
 
     it 'authenticate and returns active students' do
       response = client.students
@@ -76,8 +75,10 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'teachers' do
-    let(:endpoint) { OneRoster::TEACHERS_ENDPOINT }
-    before { mock_requests(endpoint, teachers_response) }
+    before do
+      mock_authentication
+      mock_request(OneRoster::TEACHERS_ENDPOINT, teachers_response)
+    end
 
     it 'authenticates and returns active teachers' do
       response = client.teachers
@@ -105,8 +106,10 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'classes' do
-    let(:endpoint) { OneRoster::CLASSES_ENDPOINT }
-    before { mock_requests(endpoint, classes_response) }
+    before do
+      mock_authentication
+      mock_request(OneRoster::CLASSES_ENDPOINT, classes_response)
+    end
     it 'authenticates and returns classes' do
       response = client.classes
       expect(client.authenticated?).to be(true)
@@ -119,16 +122,77 @@ RSpec.describe OneRoster::Client do
       expect(first_class.course_id).to eq(class_1['course']['sourcedId'])
       expect(first_class.provider).to eq('oneroster')
 
-      expect(second_class.id).to eq(class_2['sourcedId'])
-      expect(second_class.course_id).to eq(class_2['course']['sourcedId'])
+      expect(second_class).to be_a(OneRoster::Types::Class)
+      expect(second_class.id).to eq(class_3['sourcedId'])
+      expect(second_class.course_id).to eq(class_3['course']['sourcedId'])
       expect(second_class.provider).to eq('oneroster')
     end
 
   end
 
+  describe 'courses' do
+    before do
+      mock_authentication
+      mock_request(OneRoster::CLASSES_ENDPOINT, classes_response)
+      mock_request(OneRoster::COURSES_ENDPOINT, courses_response)
+    end
+
+    context 'without course_codes passed in' do
+      it 'returns active courses whose ids are found in classes' do
+        response = client.courses
+
+        expect(response.length).to eq(2)
+
+        first_course  = response[0]
+        second_course = response[1]
+
+        expect(first_course).to be_a(OneRoster::Types::Course)
+        expect(first_course.id).to eq(course_1['sourcedId'])
+        expect(first_course.course_code).to eq(course_1['courseCode'])
+        expect(first_course.provider).to eq('oneroster')
+
+        expect(second_course).to be_a(OneRoster::Types::Course)
+        expect(second_course.id).to eq(course_3['sourcedId'])
+        expect(second_course.course_code).to eq(course_3['courseCode'])
+        expect(second_course.provider).to eq('oneroster')
+      end
+    end
+
+    context 'with course_codes passed in' do
+      it 'returns active courses whose ids are found in classes or codes in course_codes' do
+        response = client.courses(course_4['courseCode'])
+
+        first_course  = response[0]
+        second_course = response[1]
+        third_course  = response[2]
+
+        expect(response.length).to eq(3)
+
+        expect(first_course).to be_a(OneRoster::Types::Course)
+        expect(first_course.id).to eq(course_1['sourcedId'])
+        expect(first_course.course_code).to eq(course_1['courseCode'])
+        expect(first_course.provider).to eq('oneroster')
+
+        expect(second_course).to be_a(OneRoster::Types::Course)
+        expect(second_course.id).to eq(course_3['sourcedId'])
+        expect(second_course.course_code).to eq(course_3['courseCode'])
+        expect(second_course.provider).to eq('oneroster')
+
+        expect(third_course).to be_a(OneRoster::Types::Course)
+        expect(third_course.id).to eq(course_4['sourcedId'])
+        expect(third_course.course_code).to eq(course_4['courseCode'])
+        expect(third_course.provider).to eq('oneroster')
+      end
+
+    end
+  end
+
   describe 'enrollments' do
-    let(:endpoint) { OneRoster::ENROLLMENTS_ENDPOINT }
-    before { mock_requests(endpoint, enrollments_response) }
+    before do
+      mock_authentication
+      mock_request(OneRoster::ENROLLMENTS_ENDPOINT, enrollments_response)
+    end
+
     it 'authenticates and returns enrollments' do
       response = client.enrollments
       expect(client.authenticated?).to be(true)

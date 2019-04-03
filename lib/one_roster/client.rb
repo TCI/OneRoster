@@ -17,7 +17,7 @@ module OneRoster
       client
     end
 
-    %i[students teachers classes].each do |record_type|
+    %i(students teachers classes).each do |record_type|
       define_method(record_type) do |record_ids = []|
         authenticate
 
@@ -33,15 +33,22 @@ module OneRoster
       end
     end
 
+    # course codes come from mapped_programs.course_number
+    def courses(course_codes = [])
+      class_course_numbers = classes.map(&:course_id)
+
+      courses = Paginator.fetch(connection, COURSES_ENDPOINT, :get, Types::Course).force
+
+      courses.select do |course|
+        course_codes.include?(course.course_code) ||
+          class_course_numbers.include?(course.id)
+      end
+    end
+
     def enrollments(classroom_ids = [])
       authenticate
 
-      enrollments = Paginator.fetch(
-        connection,
-        OneRoster::ENROLLMENTS_ENDPOINT,
-        :get,
-        Types::Enrollment
-      ).force
+      enrollments = Paginator.fetch(connection, ENROLLMENTS_ENDPOINT, :get, Types::Enrollment).force
 
       return enrollments if classroom_ids.empty?
 

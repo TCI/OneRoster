@@ -26,6 +26,12 @@ RSpec.configure do |config|
   config.mock_framework = :mocha
 end
 
+def mock_request(endpoint, response)
+  client.connection.expects(:execute)
+    .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
+    .returns(response)
+end
+
 def mock_authentication
   client.connection.expects(:execute)
     .with(OneRoster::TEACHERS_ENDPOINT, :get, limit: 1)
@@ -37,5 +43,4 @@ def mock_requests(endpoint, response)
   client.connection.expects(:execute)
     .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
     .returns(response)
-
 end
