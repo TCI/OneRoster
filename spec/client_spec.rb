@@ -104,7 +104,25 @@ RSpec.describe OneRoster::Client do
     end
   end
 
-  xdescribe 'classes' do
+  describe 'classes' do
+    let(:endpoint) { OneRoster::CLASSES_ENDPOINT }
+    before { mock_requests(endpoint, classes_response) }
+    it 'authenticates and returns classes' do
+      response = client.classes
+      expect(client.authenticated?).to be(true)
+
+      first_class  = response[0]
+      second_class = response[1]
+
+      expect(first_class).to be_a(OneRoster::Types::Class)
+      expect(first_class.id).to eq(class_1['sourcedId'])
+      expect(first_class.course_id).to eq(class_1['course']['sourcedId'])
+      expect(first_class.provider).to eq('oneroster')
+
+      expect(second_class.id).to eq(class_2['sourcedId'])
+      expect(second_class.course_id).to eq(class_2['course']['sourcedId'])
+      expect(second_class.provider).to eq('oneroster')
+    end
 
   end
 

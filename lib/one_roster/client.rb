@@ -17,7 +17,7 @@ module OneRoster
       client
     end
 
-    %i[students teachers].each do |record_type|
+    %i[students teachers classes].each do |record_type|
       define_method(record_type) do |record_ids = []|
         authenticate
 
