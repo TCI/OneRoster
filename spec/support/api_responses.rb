@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.shared_context 'api responses' do
-  let(:response_url) { stub(path: endpoint) }
-  let(:response_env) { stub(url: response_url) }
-
   #################################### TEACHERS RESPONSE ####################################
   let(:teacher_1) do
     {
