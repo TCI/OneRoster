@@ -2,19 +2,19 @@
 
 module OneRoster
   module Types
-    class Teacher < Base
+    class Student < Base
       attr_reader :id,
-                  :email,
                   :first_name,
                   :last_name,
+                  :username,
                   :status,
                   :provider
 
       def initialize(attributes = {})
         @id         = attributes['sourcedId']
-        @email      = attributes['email']
         @first_name = attributes['givenName']
         @last_name  = attributes['familyName']
+        @username   = attributes['username']
         @status     = attributes['status']
         @provider   = 'oneroster'
       end

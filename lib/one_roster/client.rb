@@ -17,7 +17,7 @@ module OneRoster
       client
     end
 
-    %i[teachers].each do |record_type|
+    %i[teachers students].each do |record_type|
       define_method(record_type) do |record_ids = []|
         authenticate unless @authenticated
 
@@ -38,6 +38,10 @@ module OneRoster
       raise ConnectionError unless response.success?
 
       @authenticated = true
+    end
+
+    def authenticated?
+      @authenticated
     end
 
     def connection

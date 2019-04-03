@@ -34,7 +34,7 @@ RSpec.describe OneRoster::Client do
     context 'successful authentication' do
       it 'sets authenticated status' do
         expect { client.authenticate }
-          .to change { client.authenticated }.from(false).to(true)
+          .to change { client.authenticated? }.from(false).to(true)
       end
     end
 
@@ -46,8 +46,40 @@ RSpec.describe OneRoster::Client do
     end
   end
 
-  xdescribe 'students' do
+  describe 'students' do
+    let(:endpoint) { OneRoster::STUDENTS_ENDPOINT }
+    before do
+      client.connection.expects(:execute)
+        .with(OneRoster::TEACHERS_ENDPOINT, :get, limit: 1)
+        .returns(auth_response)
+      client.connection.expects(:execute)
+        .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
+        .returns(students_response)
+    end
 
+    it 'authenticate and returns active students' do
+      response = client.students
+      expect(client.authenticated?).to be(true)
+
+      first_student = response[0]
+      second_student = response[1]
+
+      expect(first_student).to be_a(OneRoster::Types::Student)
+      expect(first_student.id).to eq(student_1['sourcedId'])
+      expect(first_student.first_name).to eq(student_1['givenName'])
+      expect(first_student.last_name).to eq(student_1['familyName'])
+      expect(first_student.username).to eq(student_1['username'])
+      expect(first_student.status).to eq(student_1['status'])
+      expect(first_student.provider).to eq('oneroster')
+
+      expect(second_student).to be_a(OneRoster::Types::Student)
+      expect(second_student.id).to eq(student_3['sourcedId'])
+      expect(second_student.first_name).to eq(student_3['givenName'])
+      expect(second_student.last_name).to eq(student_3['familyName'])
+      expect(second_student.username).to eq(student_3['username'])
+      expect(second_student.status).to eq(student_3['status'])
+      expect(second_student.provider).to eq('oneroster')
+    end
   end
 
   describe 'teachers' do
@@ -62,7 +94,7 @@ RSpec.describe OneRoster::Client do
 
     it 'authenticates and returns active teachers' do
       response = client.teachers
-      expect(client.authenticated).to be(true)
+      expect(client.authenticated?).to be(true)
 
       first_teacher = response[0]
       second_teacher = response[1]
@@ -73,6 +105,7 @@ RSpec.describe OneRoster::Client do
       expect(first_teacher.first_name).to eq(teacher_1['givenName'])
       expect(first_teacher.last_name).to eq(teacher_1['familyName'])
       expect(first_teacher.status).to eq(teacher_1['status'])
+      expect(first_teacher.provider).to eq('oneroster')
 
       expect(second_teacher).to be_a(OneRoster::Types::Teacher)
       expect(second_teacher.id).to eq(teacher_3['sourcedId'])
@@ -80,6 +113,7 @@ RSpec.describe OneRoster::Client do
       expect(second_teacher.first_name).to eq(teacher_3['givenName'])
       expect(second_teacher.last_name).to eq(teacher_3['familyName'])
       expect(second_teacher.status).to eq(teacher_3['status'])
+      expect(second_teacher.provider).to eq('oneroster')
     end
   end
 end
