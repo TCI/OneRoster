@@ -28,7 +28,7 @@ RSpec.describe OneRoster::Paginator do
         .returns(page_3_response)
     end
 
-    it 'does something' do
+    it 'makes paginated requests' do
       enrollments = paginator.force
 
       expect(enrollments.length).to eq(3)
