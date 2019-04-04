@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OneRoster
   class Connection
     OPEN_TIMEOUT = 60
@@ -10,8 +12,6 @@ module OneRoster
     def execute(path, method = :get, params = nil, body = nil)
       Response.new(raw_request(path, method, params, body))
     end
-
-    private
 
     def connection
       return @connection if @connection
@@ -26,6 +26,14 @@ module OneRoster
       end
     end
 
+    def log(message = '')
+      return unless @client.logger
+
+      @client.logger.info message
+    end
+
+    private
+
     def raw_request(path, method, params, body)
       p "request #{path} #{params}"
 
@@ -36,10 +44,6 @@ module OneRoster
         request.headers['Accept-Header'] = 'application/json'
         request.body                     = body
       end
-    end
-
-    def log(msg = '')
-      return unless @client.logger
     end
   end
 end
