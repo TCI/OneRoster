@@ -45,7 +45,7 @@ This gem supports requesting:
 #### Students
 - Request all students: 
   ```ruby
-  client.students
+    client.students
   ```
 - Request a subset of students filtered by their `sourcedId`:
   ```ruby
@@ -58,7 +58,7 @@ This gem supports requesting:
   ```
 - Request a subset of teachers filtered by their `sourcedId`:
   ```ruby
-    client.teachers([teacher_1['sourcedId']], teacher_2['sourcedId'], …])
+  client.teachers([teacher_1['sourcedId']], teacher_2['sourcedId'], …])
   ``` 
 #### Classes
 - Request all classes: 
@@ -67,7 +67,7 @@ This gem supports requesting:
   ```
 - Request a subset of classes filtered by their `sourcedId`:
   ```ruby
-    client.classes([class_1['sourcedId']], class_2['sourcedId'], …])
+  client.classes([class_1['sourcedId']], class_2['sourcedId'], …])
   ``` 
 #### Classrooms
 - Request all classrooms: 
@@ -76,7 +76,7 @@ This gem supports requesting:
   ```
 - Request a subset of active classrooms whose IDs are found in OneRoster's classes, filtered by their course's `sourcedId`:
   ```ruby
-    client.classes([enrollment_1['course']['sourcedId'], enrollment_2['course']['sourcedId'], …])
+  client.classes([enrollment_1['course']['sourcedId'], enrollment_2['course']['sourcedId'], …])
   ``` 
 #### Courses
 - Request all courses: 
@@ -85,7 +85,7 @@ This gem supports requesting:
   ```
 - Request a subset of active courses whose IDs are found in OneRoster's classes, filtered by their `sourcedId`:
   ```ruby
-    client.classes([course_1['sourcedId'], course_2['sourcedId'], …])
+  client.classes([course_1['sourcedId'], course_2['sourcedId'], …])
   ``` 
 #### Enrollments
 - Request all enrollments
@@ -94,7 +94,7 @@ This gem supports requesting:
   ```
 - Request a subset of active enrollments filtered by their class's `sourcedID`: 
   ```ruby
-    client.enrollments([class_1['sourcedId'], class_2['sourcedId']])
+  client.enrollments([class_1['sourcedId'], class_2['sourcedId']])
   ```
 
 ## Development
