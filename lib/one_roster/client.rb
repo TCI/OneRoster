@@ -41,7 +41,7 @@ module OneRoster
       courses = courses(course_codes, oneroster_classes)
 
       oneroster_classes.each_with_object([]) do |oneroster_class, oneroster_classes|
-        course = courses.find { |course| course.id == oneroster_class.course_id}
+        course = courses.find { |course| course.id == oneroster_class.course_id }
         next unless course
 
         oneroster_classes << Types::Classroom.new(course, oneroster_class)
@@ -88,7 +88,7 @@ module OneRoster
 
     private
 
-    def parse_enrollments(classroom_ids)
+    def parse_enrollments(classroom_ids = [])
       enrollments = Paginator.fetch(connection, ENROLLMENTS_ENDPOINT, :get, Types::Enrollment).force
 
       enrollments.each_with_object(teacher: [], student: []) do |enrollment, enrollments|
