@@ -6,7 +6,7 @@ require 'one_roster/version'
 Gem::Specification.new do |spec|
   spec.name          = 'oneroster'
   spec.version       = OneRoster::VERSION
-  spec.authors       = ['Bobby Julius']
+  spec.authors       = ['Robert Julius']
   spec.email         = ['robertmjulius@gmail.com']
 
   spec.summary       = 'Wrapper for the OneRoster API.'
