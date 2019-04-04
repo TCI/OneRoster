@@ -25,7 +25,7 @@ module OneRoster
             body.each { |item| yielder << @type.new(item) unless item['status'] == 'tobedeleted' }
           end
 
-          raise StopIteration if body.length < PAGE_LIMIT
+          fail StopIteration if body.length < PAGE_LIMIT
 
           @offset = next_offset
         end

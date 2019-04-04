@@ -73,7 +73,7 @@ module OneRoster
 
       response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
 
-      raise ConnectionError unless response.success?
+      fail ConnectionError unless response.success?
 
       @authenticated = true
     end
