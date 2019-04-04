@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# require 'ostruct'
 require 'spec_helper'
 
 RSpec.describe OneRoster::Connection do
@@ -39,36 +38,28 @@ RSpec.describe OneRoster::Connection do
   end
 
   describe '#execute' do
-    let(:mock_response) do
-      stub(
-        status: 200,
-        body: 'body',
-        env: stub(url: stub(path: '/enrollments'))
-      )
-    end
+    let(:status) { 200 }
+    let(:body) { 'body' }
+    let(:env) { stub(url: stub(path: '/enrollments')) }
+    let(:mock_response) { stub(status: status, body: body, env: env) }
 
     context 'successful response' do
       it 'returns a successful response object' do
         connection.expects(:connection).returns(OneRoster::MockFaradayConnection.new(mock_response))
-        response = connection.execute('/oneroster/api', :get, limit: 5000, offset: 0)
-        expect(response). to be_a(OneRoster::Response)
+        response = connection.execute('/enrollments', :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
+        expect(response).to be_a(OneRoster::Response)
         expect(response.success?).to be(true)
         expect(response.raw_body).to eq(mock_response.body)
       end
     end
 
     context 'failed response' do
-      let(:mock_response) do
-        stub(
-          status: 401,
-          body: 'unauthorized',
-          env: stub(url: stub(path: '/enrollments'))
-        )
-      end
+      let(:status) { 401 }
+      let(:body) { 'unauthorized' }
 
       it 'returns a failed response object' do
         connection.stubs(:raw_request).returns(mock_response)
-        response = connection.execute('/oneroster/api', :get, limit: 5000, offset: 0)
+        response = connection.execute('/teachers', :get, limit: OneRoster::PAGE_LIMIT, offset: 0)
         expect(response).to be_a(OneRoster::Response)
         expect(response.success?).to be(false)
         expect(response.raw_body).to eq(mock_response.body)
