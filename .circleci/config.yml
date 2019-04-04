@@ -62,13 +62,12 @@ jobs:
                               --out /tmp/test-results/rspec.xml \
                               --format progress \
                               $TEST_FILES
-            ./tmp/cc-test-reporter format-coverage -t simplecov -o "coverage/codeclimate.json"
+            ./tmp/cc-test-reporter format-coverage -t simplecov -o "tmp/codeclimate.json"
 
       - run:
           name: Upload Coverage
           command: |
-            ./tmp/cc-test-reporter sum-coverage tmp/codeclimate.*.json -p 2 -o tmp/codeclimate.total.json
-            ./tmp/cc-test-reporter upload-coverage -i tmp/codeclimate.total.json
+            ./tmp/cc-test-reporter upload-coverage -i tmp/codeclimate.json
 
       # collect reports
       - store_test_results:
