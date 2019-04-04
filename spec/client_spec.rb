@@ -49,27 +49,48 @@ RSpec.describe OneRoster::Client do
       mock_request(OneRoster::STUDENTS_ENDPOINT, students_response)
     end
 
-    it 'authenticate and returns active students' do
-      response = client.students
-      expect(client.authenticated?).to be(true)
+    context 'without ids passed in' do
+      it 'authenticates and returns active students' do
+        response = client.students
+        expect(client.authenticated?).to be(true)
 
-      first_student  = response[0]
-      second_student = response[1]
+        first_student  = response[0]
+        second_student = response[1]
 
-      expect(first_student).to be_a(OneRoster::Types::Student)
-      expect(first_student.id).to eq(student_1['sourcedId'])
-      expect(first_student.first_name).to eq(student_1['givenName'])
-      expect(first_student.last_name).to eq(student_1['familyName'])
-      expect(first_student.username).to eq(student_1['username'])
-      expect(first_student.provider).to eq('oneroster')
+        expect(first_student).to be_a(OneRoster::Types::Student)
+        expect(first_student.id).to eq(student_1['sourcedId'])
+        expect(first_student.first_name).to eq(student_1['givenName'])
+        expect(first_student.last_name).to eq(student_1['familyName'])
+        expect(first_student.username).to eq(student_1['username'])
+        expect(first_student.provider).to eq('oneroster')
 
-      expect(second_student).to be_a(OneRoster::Types::Student)
-      expect(second_student.id).to eq(student_3['sourcedId'])
-      expect(second_student.first_name).to eq(student_3['givenName'])
-      expect(second_student.last_name).to eq(student_3['familyName'])
-      expect(second_student.username).to eq(student_3['username'])
-      expect(second_student.provider).to eq('oneroster')
+        expect(second_student).to be_a(OneRoster::Types::Student)
+        expect(second_student.id).to eq(student_3['sourcedId'])
+        expect(second_student.first_name).to eq(student_3['givenName'])
+        expect(second_student.last_name).to eq(student_3['familyName'])
+        expect(second_student.username).to eq(student_3['username'])
+        expect(second_student.provider).to eq('oneroster')
+      end
     end
+
+    context 'with ids passed in' do
+      it 'authenticates and returns students whose ids have been passed in' do
+        response = client.students([student_1['sourcedId']])
+        expect(client.authenticated?).to be(true)
+
+        expect(response.length).to eq(1)
+
+        student = response[0]
+
+        expect(student).to be_a(OneRoster::Types::Student)
+        expect(student.id).to eq(student_1['sourcedId'])
+        expect(student.first_name).to eq(student_1['givenName'])
+        expect(student.last_name).to eq(student_1['familyName'])
+        expect(student.username).to eq(student_1['username'])
+        expect(student.provider).to eq('oneroster')
+      end
+    end
+
   end
 
   describe 'teachers' do
@@ -78,26 +99,48 @@ RSpec.describe OneRoster::Client do
       mock_request(OneRoster::TEACHERS_ENDPOINT, teachers_response)
     end
 
-    it 'authenticates and returns active teachers' do
-      response = client.teachers
-      expect(client.authenticated?).to be(true)
+    context 'without ids passed in' do
+      it 'authenticates and returns active teachers' do
+        response = client.teachers
+        expect(client.authenticated?).to be(true)
 
-      first_teacher  = response[0]
-      second_teacher = response[1]
+        expect(response.length).to eq(2)
 
-      expect(first_teacher).to be_a(OneRoster::Types::Teacher)
-      expect(first_teacher.id).to eq(teacher_1['sourcedId'])
-      expect(first_teacher.email).to eq(teacher_1['email'])
-      expect(first_teacher.first_name).to eq(teacher_1['givenName'])
-      expect(first_teacher.last_name).to eq(teacher_1['familyName'])
-      expect(first_teacher.provider).to eq('oneroster')
+        first_teacher  = response[0]
+        second_teacher = response[1]
 
-      expect(second_teacher).to be_a(OneRoster::Types::Teacher)
-      expect(second_teacher.id).to eq(teacher_3['sourcedId'])
-      expect(second_teacher.email).to eq(teacher_3['email'])
-      expect(second_teacher.first_name).to eq(teacher_3['givenName'])
-      expect(second_teacher.last_name).to eq(teacher_3['familyName'])
-      expect(second_teacher.provider).to eq('oneroster')
+        expect(first_teacher).to be_a(OneRoster::Types::Teacher)
+        expect(first_teacher.id).to eq(teacher_1['sourcedId'])
+        expect(first_teacher.email).to eq(teacher_1['email'])
+        expect(first_teacher.first_name).to eq(teacher_1['givenName'])
+        expect(first_teacher.last_name).to eq(teacher_1['familyName'])
+        expect(first_teacher.provider).to eq('oneroster')
+
+        expect(second_teacher).to be_a(OneRoster::Types::Teacher)
+        expect(second_teacher.id).to eq(teacher_3['sourcedId'])
+        expect(second_teacher.email).to eq(teacher_3['email'])
+        expect(second_teacher.first_name).to eq(teacher_3['givenName'])
+        expect(second_teacher.last_name).to eq(teacher_3['familyName'])
+        expect(second_teacher.provider).to eq('oneroster')
+      end
+    end
+
+    context 'with ids passed in' do
+      it 'authenticates and returns teachers whose ids have been passed in' do
+        response = client.teachers([teacher_1['sourcedId']])
+        expect(client.authenticated?).to be(true)
+
+        expect(response.length).to eq(1)
+
+        teacher = response[0]
+
+        expect(teacher).to be_a(OneRoster::Types::Teacher)
+        expect(teacher.id).to eq(teacher_1['sourcedId'])
+        expect(teacher.email).to eq(teacher_1['email'])
+        expect(teacher.first_name).to eq(teacher_1['givenName'])
+        expect(teacher.last_name).to eq(teacher_1['familyName'])
+        expect(teacher.provider).to eq('oneroster')
+      end
     end
   end
 
