@@ -5,19 +5,6 @@ require 'spec_helper'
 RSpec.describe OneRoster::Client do
   include_context 'api responses'
 
-  let(:app_id) { 'app_id' }
-  let(:app_secret) { 'app_secret' }
-  let(:api_url) { 'https://bjulez.oneroster.com/' }
-  let(:status) { 200 }
-
-  let(:client) do
-    OneRoster::Client.configure do |config|
-      config.app_id     = app_id
-      config.app_secret = app_secret
-      config.api_url    = api_url
-    end
-  end
-
   it 'is configurable' do
     expect(client).to be_a(OneRoster::Client)
     expect(client.app_id).to eq(app_id)

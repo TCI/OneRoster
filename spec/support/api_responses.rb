@@ -1,6 +1,21 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
+
 RSpec.shared_context 'api responses' do
+  let(:app_id) { 'app_id' }
+  let(:app_secret) { 'app_secret' }
+  let(:api_url) { 'https://bjulez.oneroster.com/' }
+  let(:status) { 200 }
+
+  let(:client) do
+    OneRoster::Client.configure do |config|
+      config.app_id     = app_id
+      config.app_secret = app_secret
+      config.api_url    = api_url
+    end
+  end
+
   #################################### TEACHERS RESPONSE ####################################
   let(:teacher_1) do
     {
