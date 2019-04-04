@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'ostruct'
 require 'spec_helper'
 
 RSpec.describe OneRoster::Paginator do
@@ -16,30 +15,30 @@ RSpec.describe OneRoster::Paginator do
 
   let(:page_1_response) do
     OneRoster::Response.new(
-      OpenStruct.new(
-        body: OpenStruct.new(enrollments: [enrollment_1, enrollment_2]),
+      stub(
+        body: { 'enrollments' => [enrollment_1, enrollment_2] },
         status: 200,
-        env: OpenStruct.new(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url)
       )
     )
   end
 
   let(:page_2_response) do
     OneRoster::Response.new(
-      OpenStruct.new(
-        body: OpenStruct.new(enrollments: [enrollment_3, enrollment_4]),
+      stub(
+        body: { 'enrollments' => [enrollment_3, enrollment_4] },
         status: 200,
-        env: OpenStruct.new(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url)
       )
     )
   end
 
   let(:page_3_response) do
     OneRoster::Response.new(
-      OpenStruct.new(
-        body: OpenStruct.new(enrollments: [enrollment_5]),
+      stub(
+        body: { 'enrollments' => [enrollment_5] },
         status: 200,
-        env: OpenStruct.new(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url)
       )
     )
   end
