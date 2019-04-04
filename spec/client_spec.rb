@@ -141,8 +141,9 @@ RSpec.describe OneRoster::Client do
     end
 
     context 'without course_codes passed in' do
-      it 'returns active courses whose ids are found in classes' do
+      it 'authenticates and returns active courses whose ids are found in classes' do
         response = client.courses
+        expect(client.authenticated?).to be(true)
 
         expect(response.length).to eq(2)
 
@@ -162,29 +163,71 @@ RSpec.describe OneRoster::Client do
     end
 
     context 'with course_codes passed in' do
-      it 'returns active courses whose ids are found in classes or codes in course_codes' do
-        response = client.courses(course_4['courseCode'])
+      it 'authenticates and returns active courses whose ids are in classes and codes in course_codes' do
+        response = client.courses([course_1['courseCode']])
+        expect(client.authenticated?).to be(true)
 
-        first_course  = response[0]
-        second_course = response[1]
-        third_course  = response[2]
+        expect(response.length).to eq(1)
 
-        expect(response.length).to eq(3)
+        course = response[0]
 
-        expect(first_course).to be_a(OneRoster::Types::Course)
-        expect(first_course.id).to eq(course_1['sourcedId'])
-        expect(first_course.course_code).to eq(course_1['courseCode'])
-        expect(first_course.provider).to eq('oneroster')
+        expect(course).to be_a(OneRoster::Types::Course)
+        expect(course.id).to eq(course_1['sourcedId'])
+        expect(course.course_code).to eq(course_1['courseCode'])
+        expect(course.provider).to eq('oneroster')
+      end
+    end
+  end
 
-        expect(second_course).to be_a(OneRoster::Types::Course)
-        expect(second_course.id).to eq(course_3['sourcedId'])
-        expect(second_course.course_code).to eq(course_3['courseCode'])
-        expect(second_course.provider).to eq('oneroster')
+  describe 'classrooms' do
+    before do
+      mock_authentication
+      mock_request(OneRoster::CLASSES_ENDPOINT, classes_response)
+      mock_request(OneRoster::COURSES_ENDPOINT, courses_response)
+    end
 
-        expect(third_course).to be_a(OneRoster::Types::Course)
-        expect(third_course.id).to eq(course_4['sourcedId'])
-        expect(third_course.course_code).to eq(course_4['courseCode'])
-        expect(third_course.provider).to eq('oneroster')
+    context 'without course_codes passed in' do
+      it 'authenticates and returns classrooms from active courses whose ids are found in classes' do
+        response = client.classrooms
+        expect(client.authenticated?).to be(true)
+
+        expect(response.length).to eq(2)
+
+        first_classroom  = response[0]
+        second_classroom = response[1]
+
+        expect(first_classroom).to be_a(OneRoster::Types::Classroom)
+        expect(first_classroom.id).to eq(class_1['sourcedId'])
+        expect(first_classroom.course_number).to eq(course_1['courseCode'])
+        expect(first_classroom.period).to eq('1')
+        expect(first_classroom.grades).to eq(class_1['grades'])
+        expect(first_classroom.provider).to eq('oneroster')
+
+        expect(second_classroom).to be_a(OneRoster::Types::Classroom)
+        expect(second_classroom.id).to eq(class_3['sourcedId'])
+        expect(second_classroom.course_number).to eq(course_3['courseCode'])
+        expect(second_classroom.period).to eq('3')
+        expect(second_classroom.grades).to eq(class_3['grades'])
+        expect(second_classroom.provider).to eq('oneroster')
+      end
+    end
+
+    context 'with course_codes passed in' do
+      it 'authenticates and returns classrooms from active courses whose ids are  in classes'\
+      'and codes in course_codes' do
+        response = client.classrooms([course_1['courseCode']])
+        expect(client.authenticated?).to be(true)
+
+        expect(response.length).to eq(1)
+
+        classroom = response[0]
+
+        expect(classroom).to be_a(OneRoster::Types::Classroom)
+        expect(classroom.id).to eq(class_1['sourcedId'])
+        expect(classroom.course_number).to eq(course_1['courseCode'])
+        expect(classroom.period).to eq('1')
+        expect(classroom.grades).to eq(class_1['grades'])
+        expect(classroom.provider).to eq('oneroster')
       end
     end
   end

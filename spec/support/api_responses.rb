@@ -207,8 +207,20 @@ RSpec.shared_context 'api responses' do
     }
   end
 
+  let(:class_4) do
+    {
+      'sourcedId' => 'class_4',
+      'course' => { 'sourcedId' => 'veryfakecourseid' },
+      'status' => 'active',
+      'title' => 'PROGRAMMING',
+      'periods' => ['4'],
+      'grades' => %w(06),
+      'junk' => 'data'
+    }
+  end
+
   let(:classes_response_url) { stub(path: OneRoster::CLASSES_ENDPOINT) }
-  let(:classes_body) { { 'classes' => [class_1, class_2, class_3] } }
+  let(:classes_body) { { 'classes' => [class_1, class_2, class_3, class_4] } }
   let(:classes_response) do
     OneRoster::Response.new(stub(body: classes_body, status: status, env: stub(url: classes_response_url)))
   end
@@ -251,4 +263,7 @@ RSpec.shared_context 'api responses' do
   let(:courses_response) do
     OneRoster::Response.new(stub(body: courses_body, status: status, env: stub(url: courses_response_url)))
   end
+
+  ################################### CLASSROOMS RESPONSE ###################################
+
 end

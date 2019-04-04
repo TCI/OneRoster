@@ -33,7 +33,21 @@ module OneRoster
       end
     end
 
-    # course codes come from mapped_programs.course_number
+    def classrooms(course_codes = [])
+      authenticate
+
+      oneroster_classes = classes
+
+      courses = courses(course_codes, oneroster_classes)
+
+      oneroster_classes.each_with_object([]) do |oneroster_class, oneroster_classes|
+        course = courses.find { |course| course.id == oneroster_class.course_id}
+        next unless course
+
+        oneroster_classes << Types::Classroom.new(course, oneroster_class)
+      end
+    end
+
     def courses(course_codes = [], oneroster_classes = classes)
       authenticate
 
@@ -41,10 +55,7 @@ module OneRoster
 
       courses = Paginator.fetch(connection, COURSES_ENDPOINT, :get, Types::Course).force
 
-      courses.select do |course|
-        course_codes.include?(course.course_code) ||
-          class_course_numbers.include?(course.id)
-      end
+      parse_courses(courses, course_codes, class_course_numbers)
     end
 
     def enrollments(classroom_ids = [])
@@ -84,6 +95,18 @@ module OneRoster
         next if classroom_ids.any? && !classroom_ids.include?(enrollment.classroom_id)
 
         enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?
+      end
+    end
+
+    def parse_courses(courses, course_codes, course_numbers)
+      courses.select do |course|
+        in_course_numbers = course_numbers.include?(course.id)
+
+        if course_codes.any?
+          course_codes.include?(course.course_code) && in_course_numbers
+        else
+          in_course_numbers
+        end
       end
     end
   end
