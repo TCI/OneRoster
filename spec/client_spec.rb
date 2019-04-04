@@ -347,4 +347,18 @@ RSpec.describe OneRoster::Client do
       end
     end
   end
+
+  describe 'types .to_h' do
+    it 'serializes instance variables' do
+      teacher = OneRoster::Types::Teacher.new(teacher_1)
+
+      expect(teacher.to_h).to eq(
+        id: teacher_1['sourcedId'],
+        email: teacher_1['email'],
+        first_name: teacher_1['givenName'],
+        last_name: teacher_1['familyName'],
+        provider: 'oneroster'
+      )
+    end
+  end
 end
