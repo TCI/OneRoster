@@ -279,6 +279,35 @@ RSpec.shared_context 'api responses' do
     OneRoster::Response.new(stub(body: courses_body, status: status, env: stub(url: courses_response_url)))
   end
 
-  ################################### CLASSROOMS RESPONSE ###################################
+  ################################### PAGINATION RESPONSE ###################################
+  let(:page_1_response) do
+    OneRoster::Response.new(
+      stub(
+        body: { 'enrollments' => [enrollment_1, enrollment_2] },
+        status: 200,
+        env: stub(url: enrollments_response_url)
+      )
+    )
+  end
+
+  let(:page_2_response) do
+    OneRoster::Response.new(
+      stub(
+        body: { 'enrollments' => [enrollment_3, enrollment_4] },
+        status: 200,
+        env: stub(url: enrollments_response_url)
+      )
+    )
+  end
+
+  let(:page_3_response) do
+    OneRoster::Response.new(
+      stub(
+        body: { 'enrollments' => [enrollment_5] },
+        status: 200,
+        env: stub(url: enrollments_response_url)
+      )
+    )
+  end
 
 end
