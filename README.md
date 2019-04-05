@@ -24,14 +24,12 @@ Or install it yourself as:
 The gem can be initialized as follows:
 
 ```ruby
-client = Client.configure do |config|
+client = OneRoster::Client.configure do |config|
   config.app_id     = 'app_id for district'
   config.app_secret = 'app_secret for district'
   config.api_url    = 'api_url for district'
 end
 ```
-
-
 
 ### Requests
 This gem supports requesting:
@@ -49,7 +47,7 @@ This gem supports requesting:
   ```
 - Request a subset of students filtered by their `sourcedId`:
   ```ruby
-    client.students([student_1['sourcedId]], student_2['sourcedId']…])
+    client.students([student_1['sourcedId']], student_2['sourcedId'], …])
   ``` 
 #### Teachers
 - Request all students: 
