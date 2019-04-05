@@ -18,7 +18,7 @@ module OneRoster
     end
 
     %i(students teachers classes).each do |record_type|
-      define_method(record_type) do |record_ids = []|
+      define_method(record_type) do |record_uids = []|
         authenticate
 
         endpoint = OneRoster.const_get("#{record_type.upcase}_ENDPOINT")
@@ -27,9 +27,9 @@ module OneRoster
 
         records = Paginator.fetch(connection, endpoint, :get, type).force
 
-        return records if record_ids.empty?
+        return records if record_uids.empty?
 
-        records.select { |record| record_ids.include?(record.id) }
+        records.select { |record| record_uids.include?(record.uid) }
       end
     end
 
@@ -41,7 +41,7 @@ module OneRoster
       courses = courses(course_codes, oneroster_classes)
 
       oneroster_classes.each_with_object([]) do |oneroster_class, oneroster_classes|
-        course = courses.find { |course| course.id == oneroster_class.course_id }
+        course = courses.find { |course| course.uid == oneroster_class.course_uid }
         next unless course
 
         oneroster_classes << Types::Classroom.new(course, oneroster_class)
@@ -51,17 +51,17 @@ module OneRoster
     def courses(course_codes = [], oneroster_classes = classes)
       authenticate
 
-      class_course_numbers = oneroster_classes.map(&:course_id)
+      class_course_numbers = oneroster_classes.map(&:course_uid)
 
       courses = Paginator.fetch(connection, COURSES_ENDPOINT, :get, Types::Course).force
 
       parse_courses(courses, course_codes, class_course_numbers)
     end
 
-    def enrollments(classroom_ids = [])
+    def enrollments(classroom_uids = [])
       authenticate
 
-      enrollments = parse_enrollments(classroom_ids)
+      enrollments = parse_enrollments(classroom_uids)
 
       p "Found #{enrollments.values.flatten.length} enrollments."
 
@@ -88,19 +88,19 @@ module OneRoster
 
     private
 
-    def parse_enrollments(classroom_ids = [])
+    def parse_enrollments(classroom_uids = [])
       enrollments = Paginator.fetch(connection, ENROLLMENTS_ENDPOINT, :get, Types::Enrollment).force
 
       enrollments.each_with_object(teacher: [], student: []) do |enrollment, enrollments|
-        next if classroom_ids.any? && !classroom_ids.include?(enrollment.classroom_id)
+        next if classroom_uids.any? && !classroom_uids.include?(enrollment.classroom_uid)
 
-        enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?
+        enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?(shared_classes)
       end
     end
 
     def parse_courses(courses, course_codes, course_numbers)
       courses.select do |course|
-        in_course_numbers = course_numbers.include?(course.id)
+        in_course_numbers = course_numbers.include?(course.uid)
 
         if course_codes.any?
           course_codes.include?(course.course_code) && in_course_numbers

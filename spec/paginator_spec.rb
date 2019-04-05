@@ -38,9 +38,9 @@ RSpec.describe OneRoster::Paginator do
       third_enrollment  = enrollments[2]
 
       expect(first_enrollment).to be_a(OneRoster::Types::Enrollment)
-      expect(first_enrollment.id).to eq(enrollment_1['sourcedId'])
-      expect(first_enrollment.classroom_id).to eq(enrollment_1['class']['sourcedId'])
-      expect(first_enrollment.user_id).to eq(enrollment_1['user']['sourcedId'])
+      expect(first_enrollment.uid).to eq(enrollment_1['sourcedId'])
+      expect(first_enrollment.classroom_uid).to eq(enrollment_1['class']['sourcedId'])
+      expect(first_enrollment.user_uid).to eq(enrollment_1['user']['sourcedId'])
       expect(first_enrollment.role).to eq(enrollment_1['role'])
       expect(first_enrollment.teacher?).to be(true)
       expect(first_enrollment.student?).to be(false)
@@ -48,9 +48,9 @@ RSpec.describe OneRoster::Paginator do
       expect(first_enrollment.provider).to eq('oneroster')
 
       expect(second_enrollment).to be_a(OneRoster::Types::Enrollment)
-      expect(second_enrollment.id).to eq(enrollment_3['sourcedId'])
-      expect(second_enrollment.classroom_id).to eq(enrollment_3['class']['sourcedId'])
-      expect(second_enrollment.user_id).to eq(enrollment_3['user']['sourcedId'])
+      expect(second_enrollment.uid).to eq(enrollment_3['sourcedId'])
+      expect(second_enrollment.classroom_uid).to eq(enrollment_3['class']['sourcedId'])
+      expect(second_enrollment.user_uid).to eq(enrollment_3['user']['sourcedId'])
       expect(second_enrollment.role).to eq(enrollment_3['role'])
       expect(second_enrollment.teacher?).to be(true)
       expect(second_enrollment.student?).to be(false)
@@ -58,9 +58,9 @@ RSpec.describe OneRoster::Paginator do
       expect(second_enrollment.provider).to eq('oneroster')
 
       expect(third_enrollment).to be_a(OneRoster::Types::Enrollment)
-      expect(third_enrollment.id).to eq(enrollment_4['sourcedId'])
-      expect(third_enrollment.classroom_id).to eq(enrollment_4['class']['sourcedId'])
-      expect(third_enrollment.user_id).to eq(enrollment_4['user']['sourcedId'])
+      expect(third_enrollment.uid).to eq(enrollment_4['sourcedId'])
+      expect(third_enrollment.classroom_uid).to eq(enrollment_4['class']['sourcedId'])
+      expect(third_enrollment.user_uid).to eq(enrollment_4['user']['sourcedId'])
       expect(third_enrollment.role).to eq(enrollment_4['role'])
       expect(third_enrollment.teacher?).to be(true)
       expect(third_enrollment.student?).to be(false)

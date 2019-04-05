@@ -74,7 +74,7 @@ This gem supports requesting:
   ```ruby
   client.classrooms
   ```
-- Request a subset of active classrooms whose IDs are found in OneRoster's classes, filtered by their course's `sourcedId`:
+- Request a subset of active classrooms whose UIDs are found in OneRoster's classes, filtered by their course's `sourcedId`:
   ```ruby
   client.classes([enrollment_1['course']['sourcedId'], enrollment_2['course']['sourcedId'], …])
   ``` 
@@ -83,7 +83,7 @@ This gem supports requesting:
   ```ruby
   client.courses
   ```
-- Request a subset of active courses whose IDs are found in OneRoster's classes, filtered by their `sourcedId`:
+- Request a subset of active courses whose UIDs are found in OneRoster's classes, filtered by their `sourcedId`:
   ```ruby
   client.classes([course_1['sourcedId'], course_2['sourcedId'], …])
   ``` 

@@ -3,14 +3,14 @@
 module OneRoster
   module Types
     class Course < Base
-      attr_reader :id,
+      attr_reader :uid,
                   :course_code,
                   :provider
 
       def initialize(attributes = {})
-        @id          = attributes['sourcedId']
-        @course_code = attributes['courseCode']
-        @provider    = 'oneroster'
+        @uid          = attributes['sourcedId']
+        @course_code  = attributes['courseCode']
+        @provider     = 'oneroster'
       end
     end
   end

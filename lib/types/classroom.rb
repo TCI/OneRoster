@@ -3,7 +3,7 @@
 module OneRoster
   module Types
     class Classroom < Base
-      attr_reader :id,
+      attr_reader :uid,
                   :name,
                   :course_number,
                   :period,
@@ -11,9 +11,8 @@ module OneRoster
                   :provider
 
       def initialize(course, oneroster_class)
-        @id            = oneroster_class.id
+        @uid           = oneroster_class.uid
         @name          = oneroster_class.title
-        # @course_number = course&.course_code || oneroster_class.course_id
         @course_number = course.course_code
         @period        = oneroster_class.period
         @grades        = oneroster_class.grades

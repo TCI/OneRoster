@@ -3,17 +3,17 @@
 module OneRoster
   module Types
     class Class < Base
-      attr_reader :id,
+      attr_reader :uid,
                   :title,
-                  :course_id,
+                  :course_uid,
                   :provider,
                   :period,
                   :grades
 
       def initialize(attributes = {})
-        @id         = attributes['sourcedId']
+        @uid        = attributes['sourcedId']
         @title      = capitalize(attributes['title'])
-        @course_id  = attributes['course']['sourcedId']
+        @course_uid = attributes['course']['sourcedId']
         @status     = attributes['status']
         @period     = first_period(attributes) || period_from_code(attributes)
         @grades     = attributes['grades']

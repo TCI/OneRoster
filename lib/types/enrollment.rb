@@ -3,23 +3,27 @@
 module OneRoster
   module Types
     class Enrollment < Base
-      attr_reader :id,
-                  :classroom_id,
-                  :user_id,
+      attr_reader :uid,
+                  :classroom_uid,
+                  :user_uid,
                   :role,
                   :provider
 
       def initialize(attributes = {})
-        @id           = attributes['sourcedId']
-        @classroom_id = attributes['class']['sourcedId']
-        @user_id      = attributes['user']['sourcedId']
-        @role         = attributes['role']
-        @primary      = attributes['primary']
-        @provider     = 'oneroster'
+        @uid           = attributes['sourcedId']
+        @classroom_uid = attributes['class']['sourcedId']
+        @user_uid      = attributes['user']['sourcedId']
+        @role          = attributes['role']
+        @primary       = attributes['primary']
+        @provider      = 'oneroster'
       end
 
-      def valid?
-        student? || primary_teacher?
+      def valid?(shared_classes)
+        return true if student?
+
+        return teacher? if shared_classes
+
+        primary_teacher?
       end
 
       def primary_teacher?
@@ -32,6 +36,14 @@ module OneRoster
 
       def student?
         @role == 'student'
+      end
+
+      def to_h
+        {
+          classroom_uid: @classroom_uid,
+          user_uid: @user_uid,
+          provider: @provider
+        }
       end
     end
   end

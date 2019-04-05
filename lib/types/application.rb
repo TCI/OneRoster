@@ -1,14 +1,14 @@
 module OneRoster
   module Types
     class Application < Base
-      attr_reader :id,
+      attr_reader :uid,
                   :bearer,
                   :name,
                   :tenant_name,
                   :app_id
 
       def initialize(attributes = {})
-        @id          = attributes['id']
+        @uid         = attributes['id']
         @bearer      = attributes['bearer']
         @name        = attributes['name']
         @tenant_name = attributes['tenant_name']
