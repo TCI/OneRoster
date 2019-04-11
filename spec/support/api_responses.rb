@@ -21,34 +21,34 @@ RSpec.shared_context 'api responses' do
   #################################### TEACHERS RESPONSE ####################################
   let(:teacher_1) do
     {
-      'sourcedId'  => 'teacher_1',
-      'email'      => 'goodteacher@gmail.com',
-      'givenName'  => 'good',
+      'sourcedId' => 'teacher_1',
+      'email' => 'goodteacher@gmail.com',
+      'givenName' => 'good',
       'familyName' => 'teacher',
-      'junk'       => 'data',
-      'status'     => 'active'
+      'junk' => 'data',
+      'status' => 'active'
     }
   end
 
   let(:teacher_2) do
     {
-      'sourcedId'  => 'teacher_2',
-      'email'      => 'badteacher@gmail.com',
-      'givenName'  => 'bad',
+      'sourcedId' => 'teacher_2',
+      'email' => 'badteacher@gmail.com',
+      'givenName' => 'bad',
       'familyName' => 'teacher',
-      'junk'       => 'data',
-      'status'     => 'tobedeleted'
+      'junk' => 'data',
+      'status' => 'tobedeleted'
     }
   end
 
   let(:teacher_3) do
     {
-      'sourcedId'  => 'teacher_3',
-      'email'      => 'avgteacher@gmail.com',
-      'givenName'  => 'average',
+      'sourcedId' => 'teacher_3',
+      'email' => 'avgteacher@gmail.com',
+      'givenName' => 'average',
       'familyName' => 'teacher',
-      'junk'       => 'data',
-      'status'     => 'active'
+      'junk' => 'data',
+      'status' => 'active'
     }
   end
 
@@ -68,49 +68,49 @@ RSpec.shared_context 'api responses' do
   #################################### STUDENTS RESPONSE ####################################
   let(:student_1) do
     {
-      'sourcedId'  => 'student_1',
-      'givenName'  => 'good',
+      'sourcedId' => 'student_1',
+      'givenName' => 'good',
       'familyName' => 'student',
-      'username'   => '',
-      'email'      => '',
-      'status'     => 'active',
-      'junk'       => 'data'
+      'username' => '',
+      'email' => '',
+      'status' => 'active',
+      'junk' => 'data'
     }
   end
 
   let(:student_2) do
     {
-      'sourcedId'  => 'student_2',
-      'givenName'  => 'bad',
+      'sourcedId' => 'student_2',
+      'givenName' => 'bad',
       'familyName' => 'student',
-      'username'   => 'trashkid',
-      'email'      => 'bad@school.com',
-      'status'     => 'tobedeleted',
-      'junk'       => 'data'
+      'username' => 'trashkid',
+      'email' => 'bad@school.com',
+      'status' => 'tobedeleted',
+      'junk' => 'data'
     }
   end
 
   let(:student_3) do
     {
-      'sourcedId'  => 'student_3',
-      'givenName'  => 'average',
+      'sourcedId' => 'student_3',
+      'givenName' => 'average',
       'familyName' => 'student',
-      'username'   => '',
-      'email'      => 'meh@school.com',
-      'status'     => 'active',
-      'junk'       => 'data'
+      'username' => '',
+      'email' => 'meh@school.com',
+      'status' => 'active',
+      'junk' => 'data'
     }
   end
 
   let(:student_4) do
     {
-      'sourcedId'  => '',
-      'givenName'  => 'best',
+      'sourcedId' => '',
+      'givenName' => 'best',
       'familyName' => 'student',
-      'username'   => 'bestkid1',
-      'email'      => 'best@school.com',
-      'status'     => 'active',
-      'junk'       => 'data'
+      'username' => 'bestkid1',
+      'email' => 'best@school.com',
+      'status' => 'active',
+      'junk' => 'data'
     }
   end
 
@@ -131,66 +131,66 @@ RSpec.shared_context 'api responses' do
   let(:enrollment_1) do
     {
       'sourcedId' => 'enrollment_1',
-      'class'     => { 'sourcedId' => class_1['sourcedId'] },
-      'user'      => { 'sourcedId' => teacher_1['sourcedId'] },
-      'role'      => 'teacher',
-      'primary'   => true,
-      'junk'      => 'data'
+      'class' => { 'sourcedId' => class_1['sourcedId'] },
+      'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+      'role' => 'teacher',
+      'primary' => true,
+      'junk' => 'data'
     }
   end
 
   let(:enrollment_2) do
     {
       'sourcedId' => 'enrollment_2',
-      'class'     => { 'sourcedId' => class_1['sourcedId'] },
-      'user'      => { 'sourcedId' => student_1['sourcedId'] },
-      'role'      => 'student',
-      'status'    => 'tobedeleted',
-      'junk'      => 'data'
+      'class' => { 'sourcedId' => class_1['sourcedId'] },
+      'user' => { 'sourcedId' => student_1['sourcedId'] },
+      'role' => 'student',
+      'status' => 'tobedeleted',
+      'junk' => 'data'
     }
   end
 
   let(:enrollment_3) do
     {
       'sourcedId' => 'enrollment_3',
-      'class'     => { 'sourcedId' => class_1['sourcedId'] },
-      'user'      => { 'sourcedId' => teacher_3['sourcedId'] },
-      'role'      => 'teacher',
-      'primary'   => 'false',
-      'junk'      => 'data'
+      'class' => { 'sourcedId' => class_1['sourcedId'] },
+      'user' => { 'sourcedId' => teacher_3['sourcedId'] },
+      'role' => 'teacher',
+      'primary' => 'false',
+      'junk' => 'data'
     }
   end
 
   let(:enrollment_4) do
     {
       'sourcedId' => 'enrollment_4',
-      'class'     => { 'sourcedId' => class_2['sourcedId'] },
-      'user'      => { 'sourcedId' => teacher_1['sourcedId'] },
-      'role'      => 'teacher',
-      'primary'   => 'true',
-      'junk'      => 'data'
+      'class' => { 'sourcedId' => class_2['sourcedId'] },
+      'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+      'role' => 'teacher',
+      'primary' => 'true',
+      'junk' => 'data'
     }
   end
 
   let(:enrollment_5) do
     {
       'sourcedId' => 'enrollment_5',
-      'class'     => { 'sourcedId' => class_2['sourcedId'] },
-      'user'      => { 'sourcedId' => student_2['sourcedId'] },
-      'role'      => 'student',
-      'status'    => 'tobedeleted',
-      'primary'   => 'true',
-      'junk'      => 'data'
+      'class' => { 'sourcedId' => class_2['sourcedId'] },
+      'user' => { 'sourcedId' => student_2['sourcedId'] },
+      'role' => 'student',
+      'status' => 'tobedeleted',
+      'primary' => 'true',
+      'junk' => 'data'
     }
   end
 
   let(:enrollment_6) do
     {
       'sourcedId' => 'enrollment_6',
-      'class'     => { 'sourcedId' => class_2['sourcedId'] },
-      'user'      => { 'sourcedId' => student_3['sourcedId'] },
-      'role'      => 'student',
-      'junk'      => 'data'
+      'class' => { 'sourcedId' => class_2['sourcedId'] },
+      'user' => { 'sourcedId' => student_3['sourcedId'] },
+      'role' => 'student',
+      'junk' => 'data'
     }
   end
 
