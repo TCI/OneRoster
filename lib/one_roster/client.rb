@@ -3,7 +3,7 @@
 module OneRoster
   class Client
     attr_accessor :app_id, :api_url, :app_secret, :logger, :vendor_key,
-                  :shared_classes
+                  :shared_classes, :username_source
 
     attr_reader :authenticated
 
@@ -25,7 +25,7 @@ module OneRoster
 
         type = Types.const_get(Dry::Inflector.new.singularize(record_type.to_s.capitalize))
 
-        records = Paginator.fetch(connection, endpoint, :get, type).force
+        records = Paginator.fetch(connection, endpoint, :get, type, client: self).force
 
         return records if record_uids.empty?
 
@@ -53,7 +53,13 @@ module OneRoster
 
       class_course_numbers = oneroster_classes.map(&:course_uid)
 
-      courses = Paginator.fetch(connection, COURSES_ENDPOINT, :get, Types::Course).force
+      courses = Paginator.fetch(
+        connection,
+        COURSES_ENDPOINT,
+        :get,
+        Types::Course,
+        client: self
+      ).force
 
       parse_courses(courses, course_codes, class_course_numbers)
     end
@@ -89,7 +95,13 @@ module OneRoster
     private
 
     def parse_enrollments(classroom_uids = [])
-      enrollments = Paginator.fetch(connection, ENROLLMENTS_ENDPOINT, :get, Types::Enrollment).force
+      enrollments = Paginator.fetch(
+        connection,
+        ENROLLMENTS_ENDPOINT,
+        :get,
+        Types::Enrollment,
+        client: self
+      ).force
 
       enrollments.each_with_object(teacher: [], student: []) do |enrollment, enrollments|
         next if classroom_uids.any? && !classroom_uids.include?(enrollment.classroom_uid)

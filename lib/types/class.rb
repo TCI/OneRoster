@@ -10,7 +10,7 @@ module OneRoster
                   :period,
                   :grades
 
-      def initialize(attributes = {})
+      def initialize(attributes = {}, *)
         @uid        = attributes['sourcedId']
         @title      = capitalize(attributes['title'])
         @course_uid = attributes['course']['sourcedId']

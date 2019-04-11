@@ -48,14 +48,14 @@ RSpec.describe OneRoster::Client do
         expect(first_student.uid).to eq(student_1['sourcedId'])
         expect(first_student.first_name).to eq(student_1['givenName'])
         expect(first_student.last_name).to eq(student_1['familyName'])
-        expect(first_student.username).to eq(student_1['username'])
+        expect(first_student.username).to eq(student_1['sourcedId'])
         expect(first_student.provider).to eq('oneroster')
 
         expect(second_student).to be_a(OneRoster::Types::Student)
         expect(second_student.uid).to eq(student_3['sourcedId'])
         expect(second_student.first_name).to eq(student_3['givenName'])
         expect(second_student.last_name).to eq(student_3['familyName'])
-        expect(second_student.username).to eq(student_3['username'])
+        expect(second_student.username).to eq(student_3['email'])
         expect(second_student.provider).to eq('oneroster')
       end
     end
@@ -73,11 +73,63 @@ RSpec.describe OneRoster::Client do
         expect(student.uid).to eq(student_1['sourcedId'])
         expect(student.first_name).to eq(student_1['givenName'])
         expect(student.last_name).to eq(student_1['familyName'])
-        expect(student.username).to eq(student_1['username'])
+        expect(student.username).to eq(student_1['sourcedId'])
         expect(student.provider).to eq('oneroster')
       end
     end
 
+    context 'with username_source' do
+      context 'username' do
+        let(:username_source) { 'username' }
+        it 'returns the proper usernames' do
+          response = client.students
+
+          expect(response.length).to eq(3)
+
+          first_student  = response[0]
+          second_student = response[1]
+          third_student  = response[2]
+
+          expect(first_student.username).to eq(student_1['sourcedId'])
+          expect(second_student.username).to eq(student_3['email'])
+          expect(third_student.username).to eq(student_4['username'])
+        end
+      end
+
+      context 'email' do
+        let(:username_source) { 'email' }
+        it 'returns the proper usernames' do
+          response = client.students
+
+          expect(response.length).to eq(3)
+
+          first_student  = response[0]
+          second_student = response[1]
+          third_student  = response[2]
+
+          expect(first_student.username).to eq(student_1['sourcedId'])
+          expect(second_student.username).to eq(student_3['email'])
+          expect(third_student.username).to eq(student_4['email'])
+        end
+      end
+
+      context 'sourcedId' do
+        let(:username_source) { 'sourcedId' }
+        it 'returns the proper usernames' do
+          response = client.students
+
+          expect(response.length).to eq(3)
+
+          first_student  = response[0]
+          second_student = response[1]
+          third_student  = response[2]
+
+          expect(first_student.username).to eq(student_1['sourcedId'])
+          expect(second_student.username).to eq(student_3['sourcedId'])
+          expect(third_student.username).to eq(student_4['username'])
+        end
+      end
+    end
   end
 
   describe 'teachers' do

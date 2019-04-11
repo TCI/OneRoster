@@ -4,14 +4,14 @@ module OneRoster
   PAGE_LIMIT = 5_000
 
   class Paginator
-    def initialize(connection, path, method, type, offset = 0, limit = PAGE_LIMIT)
+    def initialize(connection, path, method, type, offset = 0, limit = PAGE_LIMIT, client: nil)
       @connection = connection
       @path       = path
       @method     = method
       @type       = type
       @offset     = offset
       @limit      = limit
-      @next_path  = nil
+      @client     = client
     end
 
     def fetch
@@ -23,7 +23,9 @@ module OneRoster
           fail "Failed to fetch #{path}" unless response.success?
 
           if body.any?
-            body.each { |item| yielder << @type.new(item) unless item['status'] == 'tobedeleted' }
+            body.each do |item|
+              yielder << @type.new(item, client: @client) unless item['status'] == 'tobedeleted'
+            end
           end
 
           fail StopIteration if body.length < @limit

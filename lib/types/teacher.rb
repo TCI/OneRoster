@@ -9,7 +9,7 @@ module OneRoster
                   :last_name,
                   :provider
 
-      def initialize(attributes = {})
+      def initialize(attributes = {}, *)
         @uid        = attributes['sourcedId']
         @email      = attributes['email']
         @first_name = attributes['givenName']

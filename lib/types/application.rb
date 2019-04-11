@@ -7,7 +7,7 @@ module OneRoster
                   :tenant_name,
                   :app_id
 
-      def initialize(attributes = {})
+      def initialize(attributes = {}, *)
         @uid         = attributes['id']
         @bearer      = attributes['bearer']
         @name        = attributes['name']

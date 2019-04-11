@@ -7,7 +7,7 @@ module OneRoster
                   :course_code,
                   :provider
 
-      def initialize(attributes = {})
+      def initialize(attributes = {}, *)
         @uid          = attributes['sourcedId']
         @course_code  = attributes['courseCode']
         @provider     = 'oneroster'

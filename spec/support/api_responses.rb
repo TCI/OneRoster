@@ -7,12 +7,14 @@ RSpec.shared_context 'api responses' do
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
   let(:status) { 200 }
+  let(:username_source) { nil }
 
   let(:client) do
     OneRoster::Client.configure do |config|
-      config.app_id     = app_id
-      config.app_secret = app_secret
-      config.api_url    = api_url
+      config.app_id          = app_id
+      config.app_secret      = app_secret
+      config.api_url         = api_url
+      config.username_source = username_source
     end
   end
 
@@ -69,7 +71,8 @@ RSpec.shared_context 'api responses' do
       'sourcedId'  => 'student_1',
       'givenName'  => 'good',
       'familyName' => 'student',
-      'username'   => 'coolkid1',
+      'username'   => '',
+      'email'      => '',
       'status'     => 'active',
       'junk'       => 'data'
     }
@@ -80,7 +83,8 @@ RSpec.shared_context 'api responses' do
       'sourcedId'  => 'student_2',
       'givenName'  => 'bad',
       'familyName' => 'student',
-      'username'   => 'badkid1',
+      'username'   => 'trashkid',
+      'email'      => 'bad@school.com',
       'status'     => 'tobedeleted',
       'junk'       => 'data'
     }
@@ -91,14 +95,27 @@ RSpec.shared_context 'api responses' do
       'sourcedId'  => 'student_3',
       'givenName'  => 'average',
       'familyName' => 'student',
-      'username'   => 'mehkid1',
+      'username'   => '',
+      'email'      => 'meh@school.com',
+      'status'     => 'active',
+      'junk'       => 'data'
+    }
+  end
+
+  let(:student_4) do
+    {
+      'sourcedId'  => '',
+      'givenName'  => 'best',
+      'familyName' => 'student',
+      'username'   => 'bestkid1',
+      'email'      => 'best@school.com',
       'status'     => 'active',
       'junk'       => 'data'
     }
   end
 
   let(:students_response_url) { stub(path: OneRoster::STUDENTS_ENDPOINT) }
-  let(:students_body) { { 'users' => [student_1, student_2, student_3] } }
+  let(:students_body) { { 'users' => [student_1, student_2, student_3, student_4] } }
   let(:students_response) do
     OneRoster::Response.new(stub(body: students_body, status: status, env: stub(url: students_response_url)))
   end

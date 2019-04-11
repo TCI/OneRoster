@@ -10,7 +10,7 @@ module OneRoster
                   :grades,
                   :provider
 
-      def initialize(course, oneroster_class)
+      def initialize(course, oneroster_class, *)
         @uid           = oneroster_class.uid
         @name          = oneroster_class.title
         @course_number = course.course_code
