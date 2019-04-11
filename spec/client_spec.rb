@@ -388,8 +388,8 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'types .to_h' do
-    context 'base' do
-      it 'serializes instance variables' do
+    context 'teacher' do
+      it 'serializes the expected fields' do
         teacher = OneRoster::Types::Teacher.new(teacher_1)
 
         expect(teacher.to_h).to eq(
@@ -403,11 +403,24 @@ RSpec.describe OneRoster::Client do
     end
 
     context 'enrollments' do
-      it 'returns in the expected format' do
+      it 'serializes the expected fields' do
         enrollment = OneRoster::Types::Enrollment.new(enrollment_1)
         expect(enrollment.to_h).to eq(
-          classroom_uid: 'class_1',
-          user_uid: 'teacher_1',
+          classroom_uid: class_1['sourcedId'],
+          user_uid: teacher_1['sourcedId'],
+          provider: 'oneroster'
+        )
+      end
+    end
+
+    context 'students' do
+      it 'returns in the expected format' do
+        student = OneRoster::Types::Student.new(student_1)
+        expect(student.to_h).to eq(
+          uid: student_1['sourcedId'],
+          first_name: student_1['givenName'],
+          last_name: student_1['familyName'],
+          username: student_1['sourcedId'],
           provider: 'oneroster'
         )
       end
