@@ -44,7 +44,13 @@ module OneRoster
         course = courses.find { |course| course.uid == oneroster_class.course_uid }
         next unless course
 
-        oneroster_classes << Types::Classroom.new(course, oneroster_class)
+        oneroster_classes << Types::Classroom.new(
+          'id' => oneroster_class.uid,
+          'name' => oneroster_class.title,
+          'course_number' => course.course_code,
+          'period' => oneroster_class.period,
+          'grades' => oneroster_class.grades
+        )
       end
     end
 

@@ -10,12 +10,12 @@ module OneRoster
                   :grades,
                   :provider
 
-      def initialize(course, oneroster_class, *)
-        @uid           = oneroster_class.uid
-        @name          = oneroster_class.title
-        @course_number = course.course_code
-        @period        = oneroster_class.period
-        @grades        = oneroster_class.grades
+      def initialize(attributes = {})
+        @uid           = attributes['id']
+        @name          = attributes['name']
+        @course_number = attributes['course_number']
+        @period        = attributes['period']
+        @grades        = attributes['grades']
         @provider      = 'oneroster'
       end
     end
