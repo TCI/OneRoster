@@ -11,8 +11,9 @@ module OneRoster
 
       def initialize(attributes = {}, *)
         @uid           = attributes['sourcedId']
-        @classroom_uid = attributes['class']['sourcedId']
-        @user_uid      = attributes['user']['sourcedId']
+        # allow instantiation with classroom_uid and user_uid attrs for consistency with clever
+        @classroom_uid = attributes['classroom_uid'] || attributes['class']['sourcedId']
+        @user_uid      = attributes['user_uid'] || attributes['user']['sourcedId']
         @role          = attributes['role']
         @primary       = attributes['primary']
         @provider      = 'oneroster'
