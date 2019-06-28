@@ -325,11 +325,11 @@ RSpec.describe OneRoster::Client do
         response = client.enrollments
         expect(client.authenticated?).to be(true)
 
-        expect(response[:teacher].length).to eq(2)
+        expect(response[:teacher].length).to eq(3)
         expect(response[:student].length).to eq(1)
 
         teacher_enrollment1 = response[:teacher][0]
-        teacher_enrollment2 = response[:teacher][1]
+        teacher_enrollment2 = response[:teacher][2]
         student_enrollment = response[:student][0]
 
         expect(teacher_enrollment1).to be_a(OneRoster::Types::Enrollment)
@@ -369,7 +369,7 @@ RSpec.describe OneRoster::Client do
         response = client.enrollments([class_1['sourcedId']])
         expect(client.authenticated?).to be(true)
 
-        expect(response[:teacher].length).to eq(1)
+        expect(response[:teacher].length).to eq(2)
         expect(response[:student].length).to eq(0)
 
         teacher_enrollment = response[:teacher][0]

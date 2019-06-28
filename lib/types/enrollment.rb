@@ -19,12 +19,10 @@ module OneRoster
         @provider      = 'oneroster'
       end
 
-      def valid?(shared_classes)
+      def valid?
         return true if student?
 
-        return teacher? if shared_classes
-
-        primary_teacher?
+        teacher?
       end
 
       def primary_teacher?

@@ -2,8 +2,7 @@
 
 module OneRoster
   class Client
-    attr_accessor :app_id, :api_url, :app_secret, :logger, :vendor_key,
-                  :shared_classes, :username_source
+    attr_accessor :app_id, :api_url, :app_secret, :logger, :vendor_key, :username_source
 
     attr_reader :authenticated
 
@@ -112,7 +111,7 @@ module OneRoster
       enrollments.each_with_object(teacher: [], student: []) do |enrollment, enrollments|
         next if classroom_uids.any? && !classroom_uids.include?(enrollment.classroom_uid)
 
-        enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?(shared_classes)
+        enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?
       end
     end
 
