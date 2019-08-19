@@ -46,7 +46,7 @@ module OneRoster
       end
 
       def username_from(username_source)
-        return unless username_source
+        return unless presence(username_source)
 
         source = username_source(username_source)
 
