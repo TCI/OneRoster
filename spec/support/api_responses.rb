@@ -8,6 +8,7 @@ RSpec.shared_context 'api responses' do
   let(:api_url) { 'https://bjulez.oneroster.com/' }
   let(:status) { 200 }
   let(:username_source) { nil }
+  let(:empty_body) { { 'users' => [] } }
 
   let(:client) do
     OneRoster::Client.configure do |config|
