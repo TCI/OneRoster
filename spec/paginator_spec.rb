@@ -26,6 +26,10 @@ RSpec.describe OneRoster::Paginator do
       connection.expects(:execute)
         .with(OneRoster::ENROLLMENTS_ENDPOINT, :get, limit: 2, offset: 4)
         .returns(page_3_response)
+
+      connection.expects(:execute)
+        .with(OneRoster::ENROLLMENTS_ENDPOINT, :get, limit: 2, offset: 6)
+        .returns(empty_response)
     end
 
     it 'makes paginated requests' do

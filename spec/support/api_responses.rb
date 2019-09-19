@@ -328,4 +328,13 @@ RSpec.shared_context 'api responses' do
     )
   end
 
+  let(:empty_response) do
+    OneRoster::Response.new(
+      stub(
+        body: { 'enrollments' => [] },
+        status: 200,
+        env: stub(url: enrollments_response_url)
+      )
+    )
+  end
 end
