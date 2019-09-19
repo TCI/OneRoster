@@ -21,14 +21,13 @@ module OneRoster
           body = response.body
 
           fail "Failed to fetch #{path}" unless response.success?
+          fail StopIteration if body.empty?
 
           if body.any?
             body.each do |item|
               yielder << @type.new(item, client: @client) unless item['status'] == 'tobedeleted'
             end
           end
-
-          fail StopIteration if body.length < @limit
 
           @offset = next_offset
         end

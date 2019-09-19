@@ -8,6 +8,7 @@ RSpec.shared_context 'api responses' do
   let(:api_url) { 'https://bjulez.oneroster.com/' }
   let(:status) { 200 }
   let(:username_source) { nil }
+  let(:empty_body) { { 'users' => [] } }
 
   let(:client) do
     OneRoster::Client.configure do |config|
@@ -327,4 +328,13 @@ RSpec.shared_context 'api responses' do
     )
   end
 
+  let(:empty_response) do
+    OneRoster::Response.new(
+      stub(
+        body: { 'enrollments' => [] },
+        status: 200,
+        env: stub(url: enrollments_response_url)
+      )
+    )
+  end
 end
