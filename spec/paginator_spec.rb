@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe OneRoster::Paginator do
   include_context 'api responses'
 
-  let(:connection) { OneRoster::Connection.new(client) }
+  let(:connection) { OneRoster::Connection.new(client, 'oauth') }
   let(:paginator) do
     OneRoster::Paginator.fetch(
       connection, OneRoster::ENROLLMENTS_ENDPOINT,

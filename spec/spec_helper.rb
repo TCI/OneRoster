@@ -35,7 +35,7 @@ def mock_request(endpoint, response)
 
   client.connection.expects(:execute)
     .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: OneRoster::PAGE_LIMIT)
-    .returns(OneRoster::Response.new(stub(body: empty_body, status: status, env: stub(url: students_response_url))))
+    .returns(OneRoster::Response.new(stub(body: empty_body, status: status, env: stub(url: students_response_url), headers: {})))
 end
 
 def mock_authentication
