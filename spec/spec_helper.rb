@@ -44,6 +44,12 @@ def mock_authentication
     .returns(auth_response)
 end
 
+def mock_oauth2_authentication
+  oauth2_client.connection.expects(:execute)
+    .with("#{oauth2_client.api_url}/token", :post)
+    .returns(oauth2_auth_response)
+end
+
 def mock_requests(endpoint, response)
   mock_authentication
   client.connection.expects(:execute)

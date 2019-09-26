@@ -6,6 +6,7 @@ RSpec.shared_context 'api responses' do
   let(:app_id) { 'app_id' }
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
+  let(:oauth_strategy) { 'oauth2' }
   let(:status) { 200 }
   let(:username_source) { nil }
   let(:empty_body) { { 'users' => [] } }
@@ -16,6 +17,16 @@ RSpec.shared_context 'api responses' do
       config.app_secret      = app_secret
       config.api_url         = api_url
       config.username_source = username_source
+    end
+  end
+
+  let(:oauth2_client) do
+    OneRoster::Client.configure do |config|
+      config.app_id          = app_id
+      config.app_secret      = app_secret
+      config.api_url         = api_url
+      config.username_source = username_source
+      config.oauth_strategy  = oauth_strategy
     end
   end
 
@@ -62,8 +73,13 @@ RSpec.shared_context 'api responses' do
   ###################################### AUTH RESPONSE ######################################
   let(:auth_response_url) { stub(path: OneRoster::TEACHERS_ENDPOINT) }
   let(:auth_body) { { 'users' => [teacher_1] } }
+  let(:oauth2_auth_body) { { 'access_token' => 'sample_code' } }
   let(:auth_response) do
     OneRoster::Response.new(stub(body: auth_body, status: status, env: stub(url: teachers_response_url), headers: {}))
+  end
+
+  let(:oauth2_auth_response) do
+    OneRoster::Response.new(stub(body: oauth2_auth_body, raw_body: oauth2_auth_body, env: stub(url: teachers_response_url), status: status, headers: {}))
   end
 
   #################################### STUDENTS RESPONSE ####################################
