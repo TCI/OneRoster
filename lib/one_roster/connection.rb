@@ -5,7 +5,7 @@ module OneRoster
     OPEN_TIMEOUT = 60
     TIMEOUT = 120
 
-    attr_accessor :cookie, :oauth_strategy
+    attr_reader :cookie, :oauth_strategy
 
     def initialize(client, oauth_strategy = 'oauth')
       @client = client
