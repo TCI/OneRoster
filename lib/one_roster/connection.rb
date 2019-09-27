@@ -68,7 +68,7 @@ module OneRoster
         connection.response :json, content_type: /\bjson$/
         connection.adapter Faraday.default_adapter
       end
-      connection.basic_auth(@client.vendor_key, @client.app_secret)
+      connection.basic_auth(@client.app_id, @client.app_secret)
       connection
     end
   end
