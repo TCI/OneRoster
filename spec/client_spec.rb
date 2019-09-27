@@ -13,19 +13,37 @@ RSpec.describe OneRoster::Client do
   end
 
   describe 'authentication' do
-    before { mock_authentication }
+    context 'oauth2 authentication' do
+      before { mock_oauth2_authentication }
 
-    context 'successful authentication' do
       it 'sets authenticated status' do
-        expect { client.authenticate }
-          .to change { client.authenticated? }.from(false).to(true)
+        expect { oauth2_client.authenticate }
+          .to change { oauth2_client.authenticated? }.from(false).to(true)
+      end
+
+      context 'connection error' do
+        let(:status) { 401 }
+        it 'raises error' do
+          expect { oauth2_client.authenticate }.to raise_error(OneRoster::ConnectionError)
+        end
       end
     end
 
-    context 'connection error' do
-      let(:status) { 401 }
-      it 'raises error' do
-        expect { client.authenticate }.to raise_error(OneRoster::ConnectionError)
+    context 'oauth authentication' do
+      before { mock_authentication }
+
+      context 'successful authentication' do
+        it 'sets authenticated status' do
+          expect { client.authenticate }
+            .to change { client.authenticated? }.from(false).to(true)
+        end
+      end
+
+      context 'connection error' do
+        let(:status) { 401 }
+        it 'raises error' do
+          expect { client.authenticate }.to raise_error(OneRoster::ConnectionError)
+        end
       end
     end
   end

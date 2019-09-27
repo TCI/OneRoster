@@ -2,12 +2,15 @@
 
 module OneRoster
   class Client
-    attr_accessor :app_id, :api_url, :app_secret, :logger, :vendor_key, :username_source
+    attr_accessor :app_id, :app_token, :api_url,
+                  :app_secret, :logger, :vendor_key,
+                  :vendor_secret, :username_source, :oauth_strategy
 
     attr_reader :authenticated
 
-    def initialize
+    def initialize(oauth_strategy = 'oauth')
       @authenticated = false
+      @oauth_strategy = oauth_strategy
     end
 
     def self.configure
@@ -82,9 +85,17 @@ module OneRoster
     def authenticate
       return if authenticated?
 
-      response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
+      if oauth_strategy == 'oauth2'
+        response = token
 
-      fail ConnectionError unless response.success?
+        fail ConnectionError unless response.success?
+
+        set_auth_headers(response.raw_body, response.headers['set-cookie'])
+      else
+        response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
+
+        fail ConnectionError unless response.success?
+      end
 
       @authenticated = true
     end
@@ -94,7 +105,15 @@ module OneRoster
     end
 
     def connection
-      @connection ||= Connection.new(self)
+      @connection ||= Connection.new(self, oauth_strategy)
+    end
+
+    def token
+      connection.execute("#{api_url}/token", :post)
+    end
+
+    def set_auth_headers(token, cookie)
+      connection.set_auth_headers(token['access_token'], cookie)
     end
 
     private

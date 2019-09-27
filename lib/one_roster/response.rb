@@ -1,6 +1,6 @@
 module OneRoster
   class Response
-    attr_reader :status, :raw_body
+    attr_reader :status, :raw_body, :headers
 
     attr_accessor :body
 
@@ -12,6 +12,10 @@ module OneRoster
       return unless faraday_response.body
 
       @body = faraday_response.body[@type]
+
+      return unless faraday_response.headers
+
+      @headers = faraday_response.headers
     end
 
     def success?

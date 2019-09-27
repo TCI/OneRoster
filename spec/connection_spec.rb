@@ -41,7 +41,7 @@ RSpec.describe OneRoster::Connection do
     let(:status) { 200 }
     let(:body) { 'body' }
     let(:env) { stub(url: stub(path: '/enrollments')) }
-    let(:mock_response) { stub(status: status, body: body, env: env) }
+    let(:mock_response) { stub(status: status, body: body, env: env, headers: {}) }
 
     context 'successful response' do
       it 'returns a successful response object' do

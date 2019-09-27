@@ -6,6 +6,7 @@ RSpec.shared_context 'api responses' do
   let(:app_id) { 'app_id' }
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
+  let(:oauth_strategy) { 'oauth2' }
   let(:status) { 200 }
   let(:username_source) { nil }
   let(:empty_body) { { 'users' => [] } }
@@ -16,6 +17,16 @@ RSpec.shared_context 'api responses' do
       config.app_secret      = app_secret
       config.api_url         = api_url
       config.username_source = username_source
+    end
+  end
+
+  let(:oauth2_client) do
+    OneRoster::Client.configure do |config|
+      config.app_id          = app_id
+      config.app_secret      = app_secret
+      config.api_url         = api_url
+      config.username_source = username_source
+      config.oauth_strategy  = oauth_strategy
     end
   end
 
@@ -56,14 +67,19 @@ RSpec.shared_context 'api responses' do
   let(:teachers_response_url) { stub(path: OneRoster::TEACHERS_ENDPOINT) }
   let(:teachers_body) { { 'users' => [teacher_1, teacher_2, teacher_3] } }
   let(:teachers_response) do
-    OneRoster::Response.new(stub(body: teachers_body, status: status, env: stub(url: teachers_response_url)))
+    OneRoster::Response.new(stub(body: teachers_body, status: status, env: stub(url: teachers_response_url), headers: {}))
   end
 
   ###################################### AUTH RESPONSE ######################################
   let(:auth_response_url) { stub(path: OneRoster::TEACHERS_ENDPOINT) }
   let(:auth_body) { { 'users' => [teacher_1] } }
+  let(:oauth2_auth_body) { { 'access_token' => 'sample_code' } }
   let(:auth_response) do
-    OneRoster::Response.new(stub(body: auth_body, status: status, env: stub(url: teachers_response_url)))
+    OneRoster::Response.new(stub(body: auth_body, status: status, env: stub(url: teachers_response_url), headers: {}))
+  end
+
+  let(:oauth2_auth_response) do
+    OneRoster::Response.new(stub(body: oauth2_auth_body, raw_body: oauth2_auth_body, env: stub(url: teachers_response_url), status: status, headers: {}))
   end
 
   #################################### STUDENTS RESPONSE ####################################
@@ -118,7 +134,7 @@ RSpec.shared_context 'api responses' do
   let(:students_response_url) { stub(path: OneRoster::STUDENTS_ENDPOINT) }
   let(:students_body) { { 'users' => [student_1, student_2, student_3, student_4] } }
   let(:students_response) do
-    OneRoster::Response.new(stub(body: students_body, status: status, env: stub(url: students_response_url)))
+    OneRoster::Response.new(stub(body: students_body, status: status, env: stub(url: students_response_url), headers: {}))
   end
 
   ################################### ENROLLMENTS RESPONSE ##################################
@@ -200,7 +216,7 @@ RSpec.shared_context 'api responses' do
     { 'enrollments' => [enrollment_1, enrollment_2, enrollment_3, enrollment_4, enrollment_5, enrollment_6] }
   end
   let(:enrollments_response) do
-    OneRoster::Response.new(stub(body: enrollments_body, status: status, env: stub(url: enrollments_response_url)))
+    OneRoster::Response.new(stub(body: enrollments_body, status: status, env: stub(url: enrollments_response_url), headers: {}))
   end
 
   #################################### CLASSES RESPONSE #####################################
@@ -255,7 +271,7 @@ RSpec.shared_context 'api responses' do
   let(:classes_response_url) { stub(path: OneRoster::CLASSES_ENDPOINT) }
   let(:classes_body) { { 'classes' => [class_1, class_2, class_3, class_4] } }
   let(:classes_response) do
-    OneRoster::Response.new(stub(body: classes_body, status: status, env: stub(url: classes_response_url)))
+    OneRoster::Response.new(stub(body: classes_body, status: status, env: stub(url: classes_response_url), headers: {}))
   end
 
   #################################### COURSES RESPONSE #####################################
@@ -294,7 +310,7 @@ RSpec.shared_context 'api responses' do
   let(:courses_response_url) { stub(path: OneRoster::COURSES_ENDPOINT) }
   let(:courses_body) { { 'courses' => [course_1, course_2, course_3, course_4] } }
   let(:courses_response) do
-    OneRoster::Response.new(stub(body: courses_body, status: status, env: stub(url: courses_response_url)))
+    OneRoster::Response.new(stub(body: courses_body, status: status, env: stub(url: courses_response_url), headers: {}))
   end
 
   ################################### PAGINATION RESPONSE ###################################
@@ -303,7 +319,8 @@ RSpec.shared_context 'api responses' do
       stub(
         body: { 'enrollments' => [enrollment_1, enrollment_2] },
         status: 200,
-        env: stub(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url),
+        headers: {}
       )
     )
   end
@@ -313,7 +330,8 @@ RSpec.shared_context 'api responses' do
       stub(
         body: { 'enrollments' => [enrollment_3, enrollment_4] },
         status: 200,
-        env: stub(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url),
+        headers: {}
       )
     )
   end
@@ -323,7 +341,8 @@ RSpec.shared_context 'api responses' do
       stub(
         body: { 'enrollments' => [enrollment_5] },
         status: 200,
-        env: stub(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url),
+        headers: {}
       )
     )
   end
@@ -333,7 +352,8 @@ RSpec.shared_context 'api responses' do
       stub(
         body: { 'enrollments' => [] },
         status: 200,
-        env: stub(url: enrollments_response_url)
+        env: stub(url: enrollments_response_url),
+        headers: {}
       )
     )
   end

@@ -35,13 +35,19 @@ def mock_request(endpoint, response)
 
   client.connection.expects(:execute)
     .with(endpoint, :get, limit: OneRoster::PAGE_LIMIT, offset: OneRoster::PAGE_LIMIT)
-    .returns(OneRoster::Response.new(stub(body: empty_body, status: status, env: stub(url: students_response_url))))
+    .returns(OneRoster::Response.new(stub(body: empty_body, status: status, env: stub(url: students_response_url), headers: {})))
 end
 
 def mock_authentication
   client.connection.expects(:execute)
     .with(OneRoster::TEACHERS_ENDPOINT, :get, limit: 1)
     .returns(auth_response)
+end
+
+def mock_oauth2_authentication
+  oauth2_client.connection.expects(:execute)
+    .with("#{oauth2_client.api_url}/token", :post)
+    .returns(oauth2_auth_response)
 end
 
 def mock_requests(endpoint, response)
