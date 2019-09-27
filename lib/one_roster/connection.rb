@@ -5,8 +5,6 @@ module OneRoster
     OPEN_TIMEOUT = 60
     TIMEOUT = 120
 
-    attr_reader :cookie, :oauth_strategy
-
     def initialize(client, oauth_strategy = 'oauth')
       @client = client
       @oauth_strategy = oauth_strategy
@@ -24,7 +22,7 @@ module OneRoster
     def connection
       return @connection if @connection
 
-      @connection = if oauth_strategy == 'oauth2'
+      @connection = if @oauth_strategy == 'oauth2'
                       oauth2_connection
                     else
                       oauth_connection
@@ -47,7 +45,7 @@ module OneRoster
         request.options.timeout          = TIMEOUT
         request.url path, params
         request.headers['Accept-Header'] = 'application/json'
-        request.headers['Cookie']        = cookie
+        request.headers['Cookie']        = @cookie
         request.body                     = body
       end
     end
