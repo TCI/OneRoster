@@ -11,7 +11,11 @@ module OneRoster
 
       return unless faraday_response.body
 
-      @body = faraday_response.body[@type]
+      @body = if @type.nil?
+                faraday_response.body
+              else
+                faraday_response.body[@type]
+              end
 
       return unless faraday_response.headers
 
