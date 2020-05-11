@@ -94,7 +94,7 @@ module OneRoster
       else
         response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
 
-        fail ConnectionError response.raw_body unless response.success?
+        fail ConnectionError, response.raw_body unless response.success?
       end
 
       @authenticated = true
