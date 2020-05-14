@@ -26,7 +26,7 @@ RSpec.describe OneRoster::Connection do
       expect(conn.builder.handlers).to eq(
         [
           FaradayMiddleware::OAuth, Faraday::Response::Logger,
-          FaradayMiddleware::ParseJson, Faraday::Adapter::NetHttp
+          FaradayMiddleware::ParseJson
         ]
       )
     end

@@ -20,7 +20,7 @@ module OneRoster
           response = request(@path, @offset)
           body = response.body
 
-          fail "Failed to fetch #{path}" unless response.success?
+          fail "Failed to fetch #{@path}" unless response.success?
           fail StopIteration if body.empty?
 
           if body.any?
