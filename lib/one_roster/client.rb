@@ -88,13 +88,13 @@ module OneRoster
       if oauth_strategy == 'oauth2'
         response = token
 
-        fail ConnectionError unless response.success?
+        fail ConnectionError, response.raw_body unless response.success?
 
         set_auth_headers(response.raw_body, response.headers['set-cookie'])
       else
         response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
 
-        fail ConnectionError unless response.success?
+        fail ConnectionError, response.raw_body unless response.success?
       end
 
       @authenticated = true
