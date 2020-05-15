@@ -6,8 +6,8 @@ defaults: &defaults
 restore_ruby_cache: &restore_ruby_cache
   restore_cache:
     keys:
-      - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      - v1-dependencies-
+      - v2-dependencies-{{ checksum "Gemfile.lock" }}
+      - v2-dependencies-
 setup_rubygems: &setup_rubygems
   run:
     name: Add RubyGems API key
@@ -20,6 +20,9 @@ install_dependencies: &install_dependencies
   run:
     name: Install Dependencies
     command: |
+      echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+      source $BASH_ENV
+      gem install bundler
       bundle install --jobs=4 --retry=3 --path vendor/bundle
 
 save_ruby_cache: &save_ruby_cache
@@ -58,8 +61,6 @@ run_rspec_tests: &run_rspec_tests
                         --format progress \
                         $TEST_FILES
       ./tmp/cc-test-reporter format-coverage -t simplecov -o "tmp/codeclimate.json"
-
-
 
 upload_coverage: &upload_coverage
   run:
