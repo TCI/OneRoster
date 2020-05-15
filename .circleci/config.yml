@@ -20,8 +20,9 @@ install_dependencies: &install_dependencies
   run:
     name: Install Dependencies
     command: |
-      gem update --system
-      gem install bundler -v 2.1.4
+      echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+      source $BASH_ENV
+      gem install bundler
       bundle install --jobs=4 --retry=3 --path vendor/bundle
 
 save_ruby_cache: &save_ruby_cache
@@ -60,8 +61,6 @@ run_rspec_tests: &run_rspec_tests
                         --format progress \
                         $TEST_FILES
       ./tmp/cc-test-reporter format-coverage -t simplecov -o "tmp/codeclimate.json"
-
-
 
 upload_coverage: &upload_coverage
   run:
