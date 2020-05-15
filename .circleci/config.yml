@@ -79,14 +79,12 @@ jobs:
     steps:
       - checkout
       - *restore_ruby_cache
-      - *setup_rubygems
       - *install_dependencies
       - *save_ruby_cache
       - *download_cc_reporter
       - *persist
       - *run_rspec_tests
       - *upload_coverage
-      - *release_rubygem
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
