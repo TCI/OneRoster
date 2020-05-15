@@ -6,8 +6,8 @@ defaults: &defaults
 restore_ruby_cache: &restore_ruby_cache
   restore_cache:
     keys:
-      - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      - v1-dependencies-
+      - v2-dependencies-{{ checksum "Gemfile.lock" }}
+      - v2-dependencies-
 setup_rubygems: &setup_rubygems
   run:
     name: Add RubyGems API key
