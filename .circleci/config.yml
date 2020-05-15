@@ -73,14 +73,6 @@ release_rubygem: &release_rubygem
     command: |
       bundle exec rake release
 
-store_artifacts_and_results: &store_artifacts_and_results
-  store_test_results:
-    path: /tmp/test-results
-  store_artifacts:
-    path: /tmp/test-results
-    destination: test-results
-
-
 jobs:
   rspec-tests:
     <<: *defaults
@@ -95,7 +87,11 @@ jobs:
       - *run_rspec_tests
       - *upload_coverage
       - *release_rubygem
-      - *store_artifacts_and_results
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
 
   release:
     <<: *defaults
