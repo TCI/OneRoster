@@ -8,7 +8,10 @@ module OneRoster
                   :course_number,
                   :period,
                   :grades,
-                  :provider
+                  :provider,
+                  :term_name,
+                  :term_start_date,
+                  :term_end_date
 
       def initialize(attributes = {})
         @uid             = attributes['id']
