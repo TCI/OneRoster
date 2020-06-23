@@ -8,15 +8,21 @@ module OneRoster
                   :course_number,
                   :period,
                   :grades,
-                  :provider
+                  :provider,
+                  :term_name,
+                  :term_start_date,
+                  :term_end_date
 
       def initialize(attributes = {})
-        @uid           = attributes['id']
-        @name          = attributes['name']
-        @course_number = attributes['course_number']
-        @period        = attributes['period']
-        @grades        = attributes['grades']
-        @provider      = 'oneroster'
+        @uid             = attributes['id']
+        @name            = attributes['name']
+        @course_number   = attributes['course_number']
+        @period          = attributes['period']
+        @grades          = attributes['grades']
+        @term_name       = attributes['term_name']
+        @term_start_date = attributes['term_start_date']
+        @term_end_date   = attributes['term_end_date']
+        @provider        = 'oneroster'
       end
     end
   end

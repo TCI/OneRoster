@@ -70,6 +70,23 @@ RSpec.shared_context 'api responses' do
     OneRoster::Response.new(stub(body: teachers_body, status: status, env: stub(url: teachers_response_url), headers: {}))
   end
 
+  #################################### TERMS RESPONSE ####################################
+
+  let(:term) do
+    {
+      'sourcedId' => '1',
+      'title' => 'term name',
+      'startDate' => '2019-08-21',
+      'endDate' => '2020-01-10'
+    }
+  end
+
+  let(:terms_response_url) { stub(path: OneRoster::ACADEMIC_SESSIONS_ENDPOINT) }
+  let(:terms_response) {
+    OneRoster::Response.new(stub(body: { 'academicSessions' => [term] }, status: status, env: stub(url: terms_response_url), headers: {}))
+
+  }
+
   ###################################### AUTH RESPONSE ######################################
   let(:auth_response_url) { stub(path: OneRoster::TEACHERS_ENDPOINT) }
   let(:auth_body) { { 'users' => [teacher_1] } }
@@ -228,7 +245,8 @@ RSpec.shared_context 'api responses' do
       'title' => 'SOC STUDIES 3 - B. julez',
       'periods' => %w(1 2),
       'grades' => %w(04 05),
-      'junk' => 'data'
+      'junk' => 'data',
+      'terms' => [{ 'sourcedId' => '1' }]
     }
   end
 
@@ -240,7 +258,8 @@ RSpec.shared_context 'api responses' do
       'title' => 'PROGRAMMING',
       'periods' => ['PROGRAMMING - Period 2 - Julius'],
       'grades' => %w(06),
-      'junk' => 'data'
+      'junk' => 'data',
+      'terms' => [{ 'sourcedId' => '1' }]
     }
   end
 
@@ -252,7 +271,8 @@ RSpec.shared_context 'api responses' do
       'title' => 'meme studies 3 - b. julez',
       'classCode' => 'meme studies 3 - Period 3 - Julius',
       'grades' => %w(01 02 03),
-      'junk' => 'data'
+      'junk' => 'data',
+      'terms' => [{ 'sourcedId' => '1' }]
     }
   end
 
@@ -264,7 +284,8 @@ RSpec.shared_context 'api responses' do
       'title' => 'PROGRAMMING',
       'periods' => ['4'],
       'grades' => %w(06),
-      'junk' => 'data'
+      'junk' => 'data',
+      'terms' => [{ 'sourcedId' => '1' }]
     }
   end
 
