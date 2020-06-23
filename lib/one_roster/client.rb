@@ -40,20 +40,37 @@ module OneRoster
 
       oneroster_classes = classes
 
+      terms_hash = terms.each_with_object({}) { |term, terms| terms[term.uid] = term }
+
       courses = courses(course_codes, oneroster_classes)
 
       oneroster_classes.each_with_object([]) do |oneroster_class, oneroster_classes|
         course = courses.find { |course| course.uid == oneroster_class.course_uid }
         next unless course
 
+        term = terms_hash[oneroster_class.term_id]
+
         oneroster_classes << Types::Classroom.new(
           'id' => oneroster_class.uid,
           'name' => oneroster_class.title,
           'course_number' => course.course_code,
           'period' => oneroster_class.period,
-          'grades' => oneroster_class.grades
+          'grades' => oneroster_class.grades,
+          'term_name' => term&.name,
+          'term_start_date' => term&.start_date,
+          'term_end_date' => term&.end_date
         )
       end
+    end
+
+    def terms
+      authenticate
+
+      endpoint = OneRoster::ACADEMIC_SESSIONS_ENDPOINT
+
+      type = Types::Term
+
+      Paginator.fetch(connection, endpoint, :get, type, client: self).force
     end
 
     def courses(course_codes = [], oneroster_classes = classes)

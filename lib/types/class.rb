@@ -8,7 +8,8 @@ module OneRoster
                   :course_uid,
                   :provider,
                   :period,
-                  :grades
+                  :grades,
+                  :term_id
 
       def initialize(attributes = {}, *)
         @uid        = attributes['sourcedId']
@@ -17,6 +18,7 @@ module OneRoster
         @status     = attributes['status']
         @period     = first_period(attributes) || period_from_code(attributes)
         @grades     = attributes['grades']
+        @term_id    = attributes['terms'][0]['sourcedId']
         @provider   = 'oneroster'
       end
 

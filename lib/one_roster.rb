@@ -21,19 +21,22 @@ require 'types/classroom'
 require 'types/enrollment'
 require 'types/student'
 require 'types/teacher'
+require 'types/term'
 
 module OneRoster
   class DistrictNotFound < StandardError; end
   class ConnectionError < StandardError; end
 
-  STUDENTS_ENDPOINT    = 'ims/oneroster/v1p1/students'
-  TEACHERS_ENDPOINT    = 'ims/oneroster/v1p1/teachers'
-  COURSES_ENDPOINT     = 'ims/oneroster/v1p1/courses'
-  CLASSES_ENDPOINT     = 'ims/oneroster/v1p1/classes'
-  ENROLLMENTS_ENDPOINT = 'ims/oneroster/v1p1/enrollments'
+  STUDENTS_ENDPOINT          = 'ims/oneroster/v1p1/students'
+  TEACHERS_ENDPOINT          = 'ims/oneroster/v1p1/teachers'
+  COURSES_ENDPOINT           = 'ims/oneroster/v1p1/courses'
+  CLASSES_ENDPOINT           = 'ims/oneroster/v1p1/classes'
+  ENROLLMENTS_ENDPOINT       = 'ims/oneroster/v1p1/enrollments'
+  ACADEMIC_SESSIONS_ENDPOINT = 'ims/oneroster/v1p1/academicSessions'
 
   RESPONSE_TYPE_MAP = {
     'teachers'     => 'users',
+    'academicSessions'        => 'academicSessions',
     'students'     => 'users',
     'courses'      => 'courses',
     'classes'      => 'classes',
