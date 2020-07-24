@@ -219,6 +219,7 @@ RSpec.describe OneRoster::Client do
       expect(first_class.title).to eq('Soc Studies 3 - B. Julez')
       expect(first_class.course_uid).to eq(class_1['course']['sourcedId'])
       expect(first_class.period).to eq('1')
+      expect(first_class.subjects).to eq([])
       expect(first_class.grades).to eq(class_1['grades'])
       expect(first_class.provider).to eq('oneroster')
 
@@ -227,6 +228,7 @@ RSpec.describe OneRoster::Client do
       expect(second_class.title).to eq('Meme Studies 3 - B. Julez')
       expect(second_class.course_uid).to eq(class_3['course']['sourcedId'])
       expect(second_class.period).to eq('3')
+      expect(second_class.subjects).to eq(class_3['subjects'])
       expect(second_class.grades).to eq(class_3['grades'])
       expect(second_class.provider).to eq('oneroster')
     end
@@ -302,7 +304,7 @@ RSpec.describe OneRoster::Client do
         expect(first_classroom.course_number).to eq(course_1['courseCode'])
         expect(first_classroom.period).to eq('1')
         expect(first_classroom.grades).to eq(class_1['grades'])
-        expect(first_classroom.subject).to eq([])
+        expect(first_classroom.subjects).to eq([])
         expect(first_classroom.term_name).to eq('term name')
         expect(first_classroom.term_start_date).to eq('2019-08-21')
         expect(first_classroom.term_end_date).to eq('2020-01-10')
@@ -313,7 +315,7 @@ RSpec.describe OneRoster::Client do
         expect(second_classroom.course_number).to eq(course_3['courseCode'])
         expect(second_classroom.period).to eq('3')
         expect(second_classroom.grades).to eq(class_3['grades'])
-        expect(second_classroom.subject).to eq(class_3['subjects'])
+        expect(second_classroom.subjects).to eq(class_3['subjects'])
         expect(second_classroom.provider).to eq('oneroster')
       end
     end
