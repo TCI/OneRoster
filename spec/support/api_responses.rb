@@ -258,6 +258,7 @@ RSpec.shared_context 'api responses' do
       'title' => 'PROGRAMMING',
       'periods' => ['PROGRAMMING - Period 2 - Julius'],
       'grades' => %w(06),
+      'subjects' => 'object oriented concepts',
       'junk' => 'data',
       'terms' => [{ 'sourcedId' => '1' }]
     }
@@ -271,6 +272,7 @@ RSpec.shared_context 'api responses' do
       'title' => 'meme studies 3 - b. julez',
       'classCode' => 'meme studies 3 - Period 3 - Julius',
       'grades' => %w(01 02 03),
+      'subjects' => ['memes', 'lulz'],
       'junk' => 'data',
       'terms' => [{ 'sourcedId' => '1' }]
     }

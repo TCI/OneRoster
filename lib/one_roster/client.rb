@@ -56,6 +56,7 @@ module OneRoster
           'course_number' => course.course_code,
           'period' => oneroster_class.period,
           'grades' => oneroster_class.grades,
+          'subject' => oneroster_class.subject,
           'term_name' => term&.name,
           'term_start_date' => term&.start_date,
           'term_end_date' => term&.end_date

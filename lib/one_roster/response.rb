@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OneRoster
   class Response
     attr_reader :status, :raw_body, :headers
