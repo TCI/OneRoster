@@ -51,7 +51,7 @@ module OneRoster
         term = terms_hash[oneroster_class.term_id]
 
         oneroster_classes << Types::Classroom.new(
-          'id'   => oneroster_class.uid,
+          'id' => oneroster_class.uid,
           'name' => oneroster_class.title,
           'course_number' => course.course_code,
           'period' => oneroster_class.period,
