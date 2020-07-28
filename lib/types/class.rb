@@ -18,7 +18,7 @@ module OneRoster
         @course_uid = attributes['course']['sourcedId']
         @status     = attributes['status']
         @period     = first_period(attributes) || period_from_code(attributes)
-        @grades     = attributes['grades']
+        @grades     = presence(attributes['grades']) || []
         @subjects   = presence(attributes['subjects']) || []
         @term_id    = attributes['terms'][0]['sourcedId']
         @provider   = 'oneroster'
