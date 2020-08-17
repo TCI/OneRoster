@@ -355,7 +355,8 @@ RSpec.describe OneRoster::Client do
         expect(response[:student].length).to eq(1)
 
         teacher_enrollment1 = response[:teacher][0]
-        teacher_enrollment2 = response[:teacher][2]
+        teacher_enrollment2 = response[:teacher][1]
+        teacher_enrollment3 = response[:teacher][2]
         student_enrollment = response[:student][0]
 
         expect(teacher_enrollment1).to be_a(OneRoster::Types::Enrollment)
@@ -365,18 +366,28 @@ RSpec.describe OneRoster::Client do
         expect(teacher_enrollment1.role).to eq(enrollment_1['role'])
         expect(teacher_enrollment1.teacher?).to be(true)
         expect(teacher_enrollment1.student?).to be(false)
-        expect(teacher_enrollment1.primary_teacher?).to be(true)
+        expect(teacher_enrollment1.primary).to be(enrollment_1['primary'])
         expect(teacher_enrollment1.provider).to eq('oneroster')
 
         expect(teacher_enrollment2).to be_a(OneRoster::Types::Enrollment)
-        expect(teacher_enrollment2.uid).to eq(enrollment_4['sourcedId'])
-        expect(teacher_enrollment2.classroom_uid).to eq(enrollment_4['class']['sourcedId'])
-        expect(teacher_enrollment2.user_uid).to eq(enrollment_4['user']['sourcedId'])
-        expect(teacher_enrollment2.role).to eq(enrollment_4['role'])
+        expect(teacher_enrollment2.uid).to eq(enrollment_3['sourcedId'])
+        expect(teacher_enrollment2.classroom_uid).to eq(enrollment_3['class']['sourcedId'])
+        expect(teacher_enrollment2.user_uid).to eq(enrollment_3['user']['sourcedId'])
+        expect(teacher_enrollment2.role).to eq(enrollment_3['role'])
         expect(teacher_enrollment2.teacher?).to be(true)
         expect(teacher_enrollment2.student?).to be(false)
-        expect(teacher_enrollment2.primary_teacher?).to be(true)
+        expect(teacher_enrollment2.primary).to be(enrollment_3['primary'])
         expect(teacher_enrollment2.provider).to eq('oneroster')
+
+        expect(teacher_enrollment3).to be_a(OneRoster::Types::Enrollment)
+        expect(teacher_enrollment3.uid).to eq(enrollment_4['sourcedId'])
+        expect(teacher_enrollment3.classroom_uid).to eq(enrollment_4['class']['sourcedId'])
+        expect(teacher_enrollment3.user_uid).to eq(enrollment_4['user']['sourcedId'])
+        expect(teacher_enrollment3.role).to eq(enrollment_4['role'])
+        expect(teacher_enrollment3.teacher?).to be(true)
+        expect(teacher_enrollment3.student?).to be(false)
+        expect(teacher_enrollment3.primary).to be(enrollment_4['primary'])
+        expect(teacher_enrollment3.provider).to eq('oneroster')
 
         expect(student_enrollment).to be_a(OneRoster::Types::Enrollment)
         expect(student_enrollment.uid).to eq(enrollment_6['sourcedId'])
@@ -384,7 +395,7 @@ RSpec.describe OneRoster::Client do
         expect(student_enrollment.user_uid).to eq(enrollment_6['user']['sourcedId'])
         expect(student_enrollment.role).to eq(enrollment_6['role'])
         expect(student_enrollment.teacher?).to be(false)
-        expect(student_enrollment.primary_teacher?).to be(false)
+        expect(student_enrollment.primary).to be(false)
         expect(student_enrollment.student?).to be(true)
         expect(student_enrollment.provider).to eq('oneroster')
       end
@@ -407,7 +418,7 @@ RSpec.describe OneRoster::Client do
         expect(teacher_enrollment.role).to eq(enrollment_1['role'])
         expect(teacher_enrollment.teacher?).to be(true)
         expect(teacher_enrollment.student?).to be(false)
-        expect(teacher_enrollment.primary_teacher?).to be(true)
+        expect(teacher_enrollment.primary).to be(enrollment_1['primary'])
         expect(teacher_enrollment.provider).to eq('oneroster')
       end
     end
@@ -434,6 +445,7 @@ RSpec.describe OneRoster::Client do
         expect(enrollment.to_h).to eq(
           classroom_uid: class_1['sourcedId'],
           user_uid: teacher_1['sourcedId'],
+          primary: enrollment_1['primary'],
           provider: 'oneroster'
         )
       end
