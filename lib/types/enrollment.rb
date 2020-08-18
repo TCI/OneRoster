@@ -25,7 +25,7 @@ module OneRoster
         teacher?
       end
 
-      def primary_teacher?
+      def primary
         teacher? && @primary.to_s == 'true'
       end
 
@@ -41,6 +41,7 @@ module OneRoster
         {
           classroom_uid: @classroom_uid,
           user_uid: @user_uid,
+          primary: primary,
           provider: @provider
         }
       end
