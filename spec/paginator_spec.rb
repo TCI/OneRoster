@@ -58,7 +58,7 @@ RSpec.describe OneRoster::Paginator do
       expect(second_enrollment.role).to eq(enrollment_3['role'])
       expect(second_enrollment.teacher?).to be(true)
       expect(second_enrollment.student?).to be(false)
-      expect(second_enrollment.primary).to be(enrollment_3['primary'])
+      expect(second_enrollment.primary).to be(false)
       expect(second_enrollment.provider).to eq('oneroster')
 
       expect(third_enrollment).to be_a(OneRoster::Types::Enrollment)
@@ -68,7 +68,7 @@ RSpec.describe OneRoster::Paginator do
       expect(third_enrollment.role).to eq(enrollment_4['role'])
       expect(third_enrollment.teacher?).to be(true)
       expect(third_enrollment.student?).to be(false)
-      expect(third_enrollment.primary).to be(enrollment_4['primary'])
+      expect(third_enrollment.primary).to be(true)
       expect(third_enrollment.provider).to eq('oneroster')
     end
   end

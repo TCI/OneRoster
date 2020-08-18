@@ -366,7 +366,7 @@ RSpec.describe OneRoster::Client do
         expect(teacher_enrollment1.role).to eq(enrollment_1['role'])
         expect(teacher_enrollment1.teacher?).to be(true)
         expect(teacher_enrollment1.student?).to be(false)
-        expect(teacher_enrollment1.primary).to be(enrollment_1['primary'])
+        expect(teacher_enrollment1.primary).to eq(true)
         expect(teacher_enrollment1.provider).to eq('oneroster')
 
         expect(teacher_enrollment2).to be_a(OneRoster::Types::Enrollment)
@@ -376,7 +376,7 @@ RSpec.describe OneRoster::Client do
         expect(teacher_enrollment2.role).to eq(enrollment_3['role'])
         expect(teacher_enrollment2.teacher?).to be(true)
         expect(teacher_enrollment2.student?).to be(false)
-        expect(teacher_enrollment2.primary).to be(enrollment_3['primary'])
+        expect(teacher_enrollment2.primary).to eq(false)
         expect(teacher_enrollment2.provider).to eq('oneroster')
 
         expect(teacher_enrollment3).to be_a(OneRoster::Types::Enrollment)
@@ -386,7 +386,7 @@ RSpec.describe OneRoster::Client do
         expect(teacher_enrollment3.role).to eq(enrollment_4['role'])
         expect(teacher_enrollment3.teacher?).to be(true)
         expect(teacher_enrollment3.student?).to be(false)
-        expect(teacher_enrollment3.primary).to be(enrollment_4['primary'])
+        expect(teacher_enrollment3.primary).to eq(true)
         expect(teacher_enrollment3.provider).to eq('oneroster')
 
         expect(student_enrollment).to be_a(OneRoster::Types::Enrollment)
@@ -395,7 +395,7 @@ RSpec.describe OneRoster::Client do
         expect(student_enrollment.user_uid).to eq(enrollment_6['user']['sourcedId'])
         expect(student_enrollment.role).to eq(enrollment_6['role'])
         expect(student_enrollment.teacher?).to be(false)
-        expect(student_enrollment.primary).to be(false)
+        expect(student_enrollment.primary).to eq(false)
         expect(student_enrollment.student?).to be(true)
         expect(student_enrollment.provider).to eq('oneroster')
       end

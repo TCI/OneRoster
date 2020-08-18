@@ -7,7 +7,6 @@ module OneRoster
                   :classroom_uid,
                   :user_uid,
                   :role,
-                  :primary,
                   :provider
 
       def initialize(attributes = {}, *)
@@ -16,7 +15,7 @@ module OneRoster
         @classroom_uid = attributes['classroom_uid'] || attributes.dig('class', 'sourcedId')
         @user_uid      = attributes['user_uid'] || attributes.dig('user', 'sourcedId')
         @role          = attributes['role']
-        @primary       = teacher? ? attributes['primary'] : false
+        @primary       = attributes['primary']
         @provider      = 'oneroster'
       end
 
@@ -24,6 +23,10 @@ module OneRoster
         return true if student?
 
         teacher?
+      end
+
+      def primary
+        teacher? && @primary.to_s == 'true'
       end
 
       def teacher?
@@ -38,7 +41,7 @@ module OneRoster
         {
           classroom_uid: @classroom_uid,
           user_uid: @user_uid,
-          primary: @primary,
+          primary: primary,
           provider: @provider
         }
       end
