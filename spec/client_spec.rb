@@ -199,6 +199,56 @@ RSpec.describe OneRoster::Client do
         expect(teacher.provider).to eq('oneroster')
       end
     end
+
+    context 'with username source' do
+      context 'username' do
+        let(:staff_username_source) { 'username' }
+
+        it 'returns the proper usernames' do
+          response = client.teachers
+
+          expect(response.length).to eq(2)
+
+          first_teacher  = response[0]
+          second_teacher = response[1]
+
+          expect(first_teacher.username).to eq(teacher_1['username'])
+          expect(second_teacher.username).to be_nil
+        end
+      end
+
+      context 'email' do
+        let(:staff_username_source) { 'email' }
+
+        it 'returns the proper usernames' do
+          response = client.teachers
+
+          expect(response.length).to eq(2)
+
+          first_teacher  = response[0]
+          second_teacher = response[1]
+
+          expect(first_teacher.username).to eq(teacher_1['email'])
+          expect(second_teacher.username).to eq(teacher_3['email'])
+        end
+      end
+
+      context 'sourcedId' do
+        let(:staff_username_source) { 'sourcedId' }
+
+        it 'returns the proper usernames' do
+          response = client.teachers
+
+          expect(response.length).to eq(2)
+
+          first_teacher  = response[0]
+          second_teacher = response[1]
+
+          expect(first_teacher.username).to eq(teacher_1['sourcedId'])
+          expect(second_teacher.username).to eq(teacher_3['sourcedId'])
+        end
+      end
+    end
   end
 
   describe 'classes' do
@@ -232,7 +282,6 @@ RSpec.describe OneRoster::Client do
       expect(second_class.grades).to eq(class_3['grades'])
       expect(second_class.provider).to eq('oneroster')
     end
-
   end
 
   describe 'courses' do
@@ -434,6 +483,7 @@ RSpec.describe OneRoster::Client do
           email: teacher_1['email'],
           first_name: teacher_1['givenName'],
           last_name: teacher_1['familyName'],
+          username: nil,
           provider: 'oneroster'
         )
       end

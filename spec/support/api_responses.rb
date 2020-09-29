@@ -9,24 +9,27 @@ RSpec.shared_context 'api responses' do
   let(:oauth_strategy) { 'oauth2' }
   let(:status) { 200 }
   let(:username_source) { nil }
+  let(:staff_username_source) { nil }
   let(:empty_body) { { 'users' => [] } }
 
   let(:client) do
     OneRoster::Client.configure do |config|
-      config.app_id          = app_id
-      config.app_secret      = app_secret
-      config.api_url         = api_url
-      config.username_source = username_source
+      config.app_id                = app_id
+      config.app_secret            = app_secret
+      config.api_url               = api_url
+      config.username_source       = username_source
+      config.staff_username_source = staff_username_source
     end
   end
 
   let(:oauth2_client) do
     OneRoster::Client.configure do |config|
-      config.app_id          = app_id
-      config.app_secret      = app_secret
-      config.api_url         = api_url
-      config.username_source = username_source
-      config.oauth_strategy  = oauth_strategy
+      config.app_id                = app_id
+      config.app_secret            = app_secret
+      config.api_url               = api_url
+      config.username_source       = username_source
+      config.staff_username_source = staff_username_source
+      config.oauth_strategy        = oauth_strategy
     end
   end
 
@@ -35,6 +38,7 @@ RSpec.shared_context 'api responses' do
     {
       'sourcedId' => 'teacher_1',
       'email' => 'goodteacher@gmail.com',
+      'username' => 'goodteacher',
       'givenName' => 'good',
       'familyName' => 'teacher',
       'junk' => 'data',
@@ -46,6 +50,7 @@ RSpec.shared_context 'api responses' do
     {
       'sourcedId' => 'teacher_2',
       'email' => 'badteacher@gmail.com',
+      'username' => 'badteacher',
       'givenName' => 'bad',
       'familyName' => 'teacher',
       'junk' => 'data',

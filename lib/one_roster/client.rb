@@ -4,7 +4,7 @@ module OneRoster
   class Client
     attr_accessor :app_id, :app_token, :api_url,
                   :app_secret, :logger, :vendor_key,
-                  :username_source, :oauth_strategy
+                  :username_source, :oauth_strategy, :staff_username_source
 
     attr_reader :authenticated
 
