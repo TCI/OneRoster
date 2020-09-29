@@ -22,7 +22,7 @@ GEM
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     jaro_winkler (1.5.2)
-    json (2.2.0)
+    json (2.3.1)
     metaclass (0.0.4)
     method_source (0.8.2)
     mocha (1.8.0)
