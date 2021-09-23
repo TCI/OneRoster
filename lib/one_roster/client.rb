@@ -31,7 +31,8 @@ module OneRoster
 
         return records if record_uids.empty?
 
-        records.select { |record| record_uids.to_set.include?(record.uid) }
+        record_uids_set = record_uids.to_set
+        records.select { |record| record_uids_set.include?(record.uid) }
       end
     end
 
