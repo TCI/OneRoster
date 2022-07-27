@@ -6,6 +6,7 @@ RSpec.shared_context 'api responses' do
   let(:app_id) { 'app_id' }
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
+  let(:token_url) { 'https://king-ching.oneroster.com/' }
   let(:oauth_strategy) { 'oauth2' }
   let(:status) { 200 }
   let(:username_source) { nil }
