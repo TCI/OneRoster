@@ -2,7 +2,7 @@
 
 module OneRoster
   class Client
-    attr_accessor :app_id, :app_token, :api_url,
+    attr_accessor :app_id, :app_token, :api_url, :token_url,
                   :app_secret, :logger, :vendor_key,
                   :username_source, :oauth_strategy, :staff_username_source
 
@@ -128,7 +128,8 @@ module OneRoster
     end
 
     def token
-      connection.execute("#{api_url}/token", :post)
+      url = token_url || "#{api_url}/token"
+      connection.execute(url, :post)
     end
 
     def set_auth_headers(token, cookie)

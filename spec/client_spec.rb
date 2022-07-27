@@ -473,6 +473,35 @@ RSpec.describe OneRoster::Client do
     end
   end
 
+  describe '#token' do
+    context 'when no token is provided' do
+      it 'uses the default token path' do
+        client.connection.expects(:execute)
+                     .with("#{client.api_url}/token", :post)
+        client.token
+      end
+    end
+
+    context 'when a token is provided' do
+      let(:client) do
+        OneRoster::Client.configure do |config|
+          config.app_id                = app_id
+          config.app_secret            = app_secret
+          config.api_url               = api_url
+          config.username_source       = username_source
+          config.staff_username_source = staff_username_source
+          config.token_url             = token_url
+        end
+      end
+
+      it 'uses the provided token path' do
+        client.connection.expects(:execute)
+              .with(token_url, :post)
+        client.token
+      end
+    end
+  end
+
   describe 'types .to_h' do
     context 'teacher' do
       it 'serializes the expected fields' do
