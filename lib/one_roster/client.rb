@@ -2,7 +2,7 @@
 
 module OneRoster
   class Client
-    attr_accessor :app_id, :app_token, :api_url, :token_url,
+    attr_accessor :app_id, :app_token, :api_url, :token_url, :roster_app,
                   :app_secret, :logger, :vendor_key,
                   :username_source, :oauth_strategy, :staff_username_source
 
@@ -129,7 +129,13 @@ module OneRoster
 
     def token
       url = token_url || "#{api_url}/token"
-      connection.execute(url, :post)
+
+      if roster_app == 'infinite_campus'
+        connection.execute(url, :post, { grant_type: 'client_credentials',
+                                         scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' })
+      else
+        connection.execute(url, :post)
+      end
     end
 
     def set_auth_headers(token, cookie)

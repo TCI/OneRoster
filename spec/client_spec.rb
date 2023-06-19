@@ -500,6 +500,28 @@ RSpec.describe OneRoster::Client do
         client.token
       end
     end
+
+    context 'when the app is infinite_campus' do
+      let(:client) do
+        OneRoster::Client.configure do |config|
+          config.app_id                = app_id
+          config.app_secret            = app_secret
+          config.api_url               = api_url
+          config.username_source       = username_source
+          config.staff_username_source = staff_username_source
+          config.token_url             = token_url
+          config.roster_app            = 'infinite_campus'
+        end
+      end
+
+      it 'requests with the grant_type' do
+        client.connection.expects(:execute)
+              .with(token_url, :post,
+                    { grant_type: 'client_credentials',
+                      scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' })
+        client.token
+      end
+    end
   end
 
   describe 'types .to_h' do
