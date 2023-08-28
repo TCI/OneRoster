@@ -130,9 +130,13 @@ module OneRoster
     def token
       url = token_url || "#{api_url}/token"
 
+      credential_params = { grant_type: 'client_credentials',
+                            scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' }
+
       if roster_app == 'infinite_campus'
-        connection.execute(url, :post, { grant_type: 'client_credentials',
-                                         scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' })
+        connection.execute(url, :post, credential_params)
+      elsif roster_app == 'synergy'
+        connection.execute(url, :post, nil, credential_params)
       else
         connection.execute(url, :post)
       end

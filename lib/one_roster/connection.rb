@@ -44,10 +44,22 @@ module OneRoster
         request.options.open_timeout     = OPEN_TIMEOUT
         request.options.timeout          = TIMEOUT
         request.url path, params
-        request.headers['Accept-Header'] = 'application/json'
+        request.headers['Content-Type']  = content_type
         request.headers['Cookie']        = @cookie
-        request.body                     = body
+        request.body                     = render_body(body)
       end
+    end
+
+    def content_type
+      return 'application/x-www-form-urlencoded' if @client.roster_app == 'synergy'
+
+      'application/json'
+    end
+
+    def render_body(body)
+      return URI.encode_www_form(body) if !body.nil? && @client.roster_app == 'synergy'
+
+      body
     end
 
     def oauth_connection
