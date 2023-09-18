@@ -4,7 +4,7 @@ module OneRoster
   class Client
     attr_accessor :app_id, :app_token, :api_url, :token_url, :roster_app,
                   :app_secret, :logger, :vendor_key,
-                  :username_source, :oauth_strategy, :staff_username_source
+                  :username_source, :oauth_strategy, :staff_username_source, :token_content_type
 
     attr_reader :authenticated
 
@@ -134,9 +134,9 @@ module OneRoster
                             scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' }
 
       if roster_app == 'infinite_campus'
-        connection.execute(url, :post, credential_params)
+        connection.execute(url, :post, credential_params, nil, token_content_type)
       elsif roster_app == 'synergy'
-        connection.execute(url, :post, nil, credential_params)
+        connection.execute(url, :post, nil, credential_params, token_content_type)
       else
         connection.execute(url, :post)
       end

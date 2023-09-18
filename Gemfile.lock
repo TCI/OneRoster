@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    oneroster (2.3.6)
+    oneroster (2.3.9)
       dry-inflector
       faraday
       faraday_middleware
