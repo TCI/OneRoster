@@ -518,7 +518,55 @@ RSpec.describe OneRoster::Client do
         client.connection.expects(:execute)
               .with(token_url, :post,
                     { grant_type: 'client_credentials',
-                      scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' })
+                      scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' }, nil, nil)
+        client.token
+      end
+    end
+
+    context 'when the app is synergy' do
+      let(:client) do
+        OneRoster::Client.configure do |config|
+          config.app_id                = app_id
+          config.app_secret            = app_secret
+          config.api_url               = api_url
+          config.username_source       = username_source
+          config.staff_username_source = staff_username_source
+          config.token_url             = token_url
+          config.roster_app            = 'synergy'
+        end
+      end
+
+      it 'requests with the grant_type' do
+        client.connection.expects(:execute)
+              .with(token_url, :post,
+                    nil,
+                    { grant_type: 'client_credentials',
+                      scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' },
+                    nil)
+        client.token
+      end
+    end
+
+    context 'when a content type is defined' do
+      let(:content_type) { 'application/json' }
+      let(:client) do
+        OneRoster::Client.configure do |config|
+          config.app_id                = app_id
+          config.app_secret            = app_secret
+          config.api_url               = api_url
+          config.username_source       = username_source
+          config.staff_username_source = staff_username_source
+          config.token_url             = token_url
+          config.roster_app            = 'infinite_campus'
+          config.token_content_type    = content_type
+        end
+      end
+
+      it 'requests with the grant_type' do
+        client.connection.expects(:execute)
+              .with(token_url, :post,
+                    { grant_type: 'client_credentials',
+                      scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' }, nil, content_type)
         client.token
       end
     end
