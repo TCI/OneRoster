@@ -22,6 +22,7 @@ require 'types/enrollment'
 require 'types/student'
 require 'types/teacher'
 require 'types/term'
+require 'types/admin'
 
 module OneRoster
   class DistrictNotFound < StandardError; end
