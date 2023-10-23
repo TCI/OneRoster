@@ -39,7 +39,7 @@ module OneRoster
     def admins(record_uids = [])
       authenticate
 
-      records = Paginator.fetch(connection, ADMINS_ENDPOINT, :get, Admin, client: self).force
+      records = Paginator.fetch(connection, ADMINS_ENDPOINT, :get, Types::Admin, client: self).force
 
       return records if record_uids.empty?
 
