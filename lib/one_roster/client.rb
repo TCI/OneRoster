@@ -36,6 +36,17 @@ module OneRoster
       end
     end
 
+    def admins(record_uids = [])
+      authenticate
+
+      records = Paginator.fetch(connection, ADMINS_ENDPOINT, :get, Admin, client: self).force
+
+      return records if record_uids.empty?
+
+      record_uids_set = record_uids.to_set
+      records.select { |record| record_uids_set.include?(record.uid) }
+    end
+
     def classrooms(course_codes = [])
       authenticate
 

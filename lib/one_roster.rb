@@ -29,17 +29,19 @@ module OneRoster
 
   STUDENTS_ENDPOINT          = 'ims/oneroster/v1p1/students'
   TEACHERS_ENDPOINT          = 'ims/oneroster/v1p1/teachers'
+  ADMINS_ENDPOINT            = "ims/oneroster/v1p1/users?filter=role='administrator'"
   COURSES_ENDPOINT           = 'ims/oneroster/v1p1/courses'
   CLASSES_ENDPOINT           = 'ims/oneroster/v1p1/classes'
   ENROLLMENTS_ENDPOINT       = 'ims/oneroster/v1p1/enrollments'
   ACADEMIC_SESSIONS_ENDPOINT = 'ims/oneroster/v1p1/academicSessions'
 
   RESPONSE_TYPE_MAP = {
-    'teachers'     => 'users',
-    'academicSessions'        => 'academicSessions',
-    'students'     => 'users',
-    'courses'      => 'courses',
-    'classes'      => 'classes',
-    'enrollments'  => 'enrollments'
+    'users'            => 'users',
+    'teachers'         => 'users',
+    'students'         => 'users',
+    'academicSessions' => 'academicSessions',
+    'courses'          => 'courses',
+    'classes'          => 'classes',
+    'enrollments'      => 'enrollments'
   }.freeze
 end

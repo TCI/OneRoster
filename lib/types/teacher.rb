@@ -17,6 +17,7 @@ module OneRoster
         @api_username = attributes['username']
         @username     = username(client)
         @provider     = 'oneroster'
+        @role         = 'teacher'
       end
 
       def username(client = nil)
