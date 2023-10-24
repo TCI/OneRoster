@@ -7,7 +7,8 @@ module OneRoster
                   :email,
                   :first_name,
                   :last_name,
-                  :provider
+                  :provider,
+                  :role
 
       def initialize(attributes = {}, *, client: nil)
         @uid          = attributes['sourcedId']
