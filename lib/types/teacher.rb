@@ -10,13 +10,13 @@ module OneRoster
                   :provider,
                   :role
 
-      def initialize(attributes = {}, *, client: nil)
+      def initialize(attributes = {}, *, options)
         @uid          = attributes['sourcedId']
         @email        = attributes['email']
         @first_name   = attributes['givenName']
         @last_name    = attributes['familyName']
         @api_username = attributes['username']
-        @username     = username(client)
+        @username     = username(options[:client])
         @provider     = 'oneroster'
         @role         = 'teacher'
       end

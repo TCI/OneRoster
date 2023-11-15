@@ -8,14 +8,14 @@ module OneRoster
                   :last_name,
                   :provider
 
-      def initialize(attributes = {}, client: nil)
+      def initialize(attributes = {}, options)
         @uid          = attributes['sourcedId']
         @first_name   = attributes['givenName']
         @last_name    = attributes['familyName']
         @api_username = attributes['username']
         @status       = attributes['status']
         @email        = attributes['email']
-        @username     = username(client)
+        @username     = username(options[:client])
         @provider     = 'oneroster'
       end
 
