@@ -34,8 +34,8 @@ module OneRoster
       end.lazy
     end
 
-    def self.fetch(*params)
-      new(*params).fetch
+    def self.fetch(*params, **kwargs)
+      new(*params, **kwargs).fetch
     end
 
     private
