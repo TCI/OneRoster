@@ -60,7 +60,7 @@ module OneRoster
         course = courses.find { |course| course.uid == oneroster_class.course_uid }
         next unless course
 
-        term = terms_hash[oneroster_class.term_id]
+        term = terms_hash[oneroster_class.term_id&.first]
 
         oneroster_classes << Types::Classroom.new(
           'id' => oneroster_class.uid,
@@ -71,7 +71,8 @@ module OneRoster
           'subjects' => oneroster_class.subjects,
           'term_name' => term&.name,
           'term_start_date' => term&.start_date,
-          'term_end_date' => term&.end_date
+          'term_end_date' => term&.end_date,
+          'term_id' => oneroster_class.term_id
         )
       end
     end
