@@ -20,7 +20,7 @@ module OneRoster
         @period     = first_period(attributes) || period_from_code(attributes)
         @grades     = presence(attributes['grades']) || []
         @subjects   = presence(attributes['subjects']) || []
-        @term_id    = attributes.dig('terms').map { |term| term['sourcedId'] }
+        @term_id    = attributes.dig('terms')&.map { |term| term['sourcedId'] } || []
         @provider   = 'oneroster'
       end
 
