@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'faraday_middleware'
-  spec.add_runtime_dependency 'dry-inflector'
+  spec.add_runtime_dependency 'dry-inflector', '~> 1.0.0'
   spec.add_runtime_dependency 'simple_oauth'
   spec.add_runtime_dependency 'oauth'
 

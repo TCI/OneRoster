@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    oneroster (2.3.17)
-      dry-inflector
+    oneroster (2.3.18)
+      dry-inflector (~> 1.0.0)
       faraday
       faraday_middleware
       oauth
