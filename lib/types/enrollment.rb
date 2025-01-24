@@ -7,7 +7,9 @@ module OneRoster
                   :classroom_uid,
                   :user_uid,
                   :role,
-                  :provider
+                  :provider,
+                  :begin_date,
+                  :end_date
 
       def initialize(attributes = {}, *)
         @uid           = attributes['sourcedId']
@@ -16,6 +18,8 @@ module OneRoster
         @user_uid      = attributes['user_uid'] || attributes.dig('user', 'sourcedId')
         @role          = attributes['role']
         @primary       = attributes['primary']
+        @begin_date    = presence(attributes['beginDate'])
+        @end_date      = presence(attributes['endDate'])
         @provider      = 'oneroster'
       end
 
@@ -37,6 +41,14 @@ module OneRoster
         @role == 'student'
       end
 
+      def in_term?
+        return true if begin_date.nil? && end_date.nil?
+        return Time.parse(begin_date) < Time.now if !begin_date.nil? && end_date.nil?
+        return Time.parse(end_date) > Time.now if !end_date.nil? && begin_date.nil?
+
+        Time.parse(begin_date) <= Time.now && Time.parse(end_date) >= Time.now
+      end
+
       def to_h
         {
           classroom_uid: @classroom_uid,
@@ -44,6 +56,10 @@ module OneRoster
           primary: primary,
           provider: @provider
         }
+      end
+
+      def presence(value)
+        value unless value.respond_to?(:empty?) && value.empty?
       end
     end
   end
