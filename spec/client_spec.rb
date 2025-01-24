@@ -395,6 +395,109 @@ RSpec.describe OneRoster::Client do
       mock_request(OneRoster::ENROLLMENTS_ENDPOINT, enrollments_response)
     end
 
+    context 'when the enrollment is in term' do
+      let(:enrollment_1) do
+        {
+          'sourcedId' => 'enrollment_1',
+          'class' => { 'sourcedId' => class_1['sourcedId'] },
+          'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+          'role' => 'teacher',
+          'primary' => true,
+          'junk' => 'data',
+          'beginDate' => (Time.now - 60 * 60 * 24 * 7).strftime('%Y-%m-%d'),
+          'endDate' => (Time.now + 60 * 60 * 24 * 7).strftime('%Y-%m-%d'),
+        }
+      end
+
+      it 'is included in the response' do
+        response = client.enrollments
+
+        expect(response[:teacher].find { |enrollment| enrollment.uid == 'enrollment_1' }).not_to be_nil
+      end
+    end
+
+    context 'when the enrollment only has a begin date in term' do
+      let(:enrollment_1) do
+        {
+          'sourcedId' => 'enrollment_1',
+          'class' => { 'sourcedId' => class_1['sourcedId'] },
+          'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+          'role' => 'teacher',
+          'primary' => true,
+          'junk' => 'data',
+          'beginDate' => (Time.now - 60 * 60 * 24 * 7).strftime('%Y-%m-%d'),
+        }
+      end
+
+      it 'is included in the response' do
+        response = client.enrollments
+
+        expect(response[:teacher].find { |enrollment| enrollment.uid == 'enrollment_1' }).not_to be_nil
+      end
+    end
+
+    context 'when the enrollment only has an end date in term' do
+      let(:enrollment_1) do
+        {
+          'sourcedId' => 'enrollment_1',
+          'class' => { 'sourcedId' => class_1['sourcedId'] },
+          'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+          'role' => 'teacher',
+          'primary' => true,
+          'junk' => 'data',
+          'endDate' => (Time.now + 60 * 60 * 24 * 7).strftime('%Y-%m-%d'),
+        }
+      end
+
+      it 'is included in the response' do
+        response = client.enrollments
+
+        expect(response[:teacher].find { |enrollment| enrollment.uid == 'enrollment_1' }).not_to be_nil
+      end
+    end
+
+    context 'when the enrollment has blank data' do
+      let(:enrollment_1) do
+        {
+          'sourcedId' => 'enrollment_1',
+          'class' => { 'sourcedId' => class_1['sourcedId'] },
+          'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+          'role' => 'teacher',
+          'primary' => true,
+          'junk' => 'data',
+          'beginDate' => '',
+          'endDate' => '',
+        }
+      end
+
+      it 'is included in the response' do
+        response = client.enrollments
+
+        expect(response[:teacher].find { |enrollment| enrollment.uid == 'enrollment_1' }).not_to be_nil
+      end
+    end
+
+    context 'when the enrollment is out of term' do
+      let(:enrollment_1) do
+        {
+          'sourcedId' => 'enrollment_1',
+          'class' => { 'sourcedId' => class_1['sourcedId'] },
+          'user' => { 'sourcedId' => teacher_1['sourcedId'] },
+          'role' => 'teacher',
+          'primary' => true,
+          'junk' => 'data',
+          'beginDate' => (Time.now - 2 * 60 * 60 * 24 * 7).strftime('%Y-%m-%d'),
+          'endDate' => (Time.now - 60 * 60 * 24 * 7).strftime('%Y-%m-%d'),
+        }
+      end
+
+      it 'is included in the response' do
+        response = client.enrollments
+
+        expect(response[:teacher].find { |enrollment| enrollment.uid == 'enrollment_1' }).to be_nil
+      end
+    end
+
     context 'without classroom_uids passed in' do
       it 'authenticates and returns enrollments' do
         response = client.enrollments
