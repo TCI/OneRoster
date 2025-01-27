@@ -11,7 +11,22 @@ module OneRoster
     end
 
     def execute(path, method = :get, params = nil, body = nil, content_type = nil)
-      Response.new(raw_request(path, method, params, body, content_type))
+      response = Response.new(raw_request(path, method, params, body, content_type))
+
+      if [502, 504].include?(response.status)
+        log_to_sentry(
+          'client.app_id' => @client.app_id,
+          'connection.path' => path,
+          'connection.method' => method,
+          'connection.params' => params,
+          'connection.body' => body,
+          'connection.content_type' => content_type,
+          'response.http_status' => response.status,
+          'response.raw_body' => response.raw_body
+        )
+      end
+
+      response
     end
 
     def set_auth_headers(token, cookie)
@@ -88,6 +103,12 @@ module OneRoster
       end
       connection.basic_auth(@client.app_id, @client.app_secret)
       connection
+    end
+
+    def log_to_sentry(payload)
+      return unless @client.sentry_client
+
+      @client.sentry_client.capture_message('Exception in OneRoster::Connection', **{ extra: payload })
     end
   end
 end
