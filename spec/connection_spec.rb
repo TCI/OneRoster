@@ -8,6 +8,7 @@ RSpec.describe OneRoster::Connection do
   let(:app_id) { 'app_id' }
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
+  let(:sentry_client) { nil }
 
   let(:client) do
     OneRoster::Client.configure do |config|
@@ -15,6 +16,7 @@ RSpec.describe OneRoster::Connection do
       config.app_secret = app_secret
       config.api_url    = api_url
       config.logger     = logger
+      config.sentry_client = sentry_client
     end
   end
 
@@ -63,6 +65,33 @@ RSpec.describe OneRoster::Connection do
         expect(response).to be_a(OneRoster::Response)
         expect(response.success?).to be(false)
         expect(response.raw_body).to eq(mock_response.body)
+      end
+    end
+
+    context '502 response' do
+      let(:status) { 502 }
+      let(:body) { 'Bad Gateway' }
+
+      before { connection.stubs(:raw_request).returns(mock_response) }
+
+      it 'does not log to sentry and returns a failed response object' do
+        response = connection.execute('/teachers', :get, limit: OneRoster::PAGE_LIMIT)
+        expect(response).to be_a(OneRoster::Response)
+        expect(response.success?).to be(false)
+        expect(response.raw_body).to eq(mock_response.body)
+      end
+
+      context 'with a sentry_client configured' do
+        let(:sentry_client) { stub(capture_message: stub) }
+
+        it 'logs to sentry and returns a failed response object' do
+          sentry_client.expects(:capture_message)
+
+          response = connection.execute('/teachers', :get, limit: OneRoster::PAGE_LIMIT)
+          expect(response).to be_a(OneRoster::Response)
+          expect(response.success?).to be(false)
+          expect(response.raw_body).to eq(mock_response.body)
+        end
       end
     end
   end
