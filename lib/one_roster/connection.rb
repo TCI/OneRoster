@@ -108,7 +108,10 @@ module OneRoster
     def log_to_sentry(payload)
       return unless @client.sentry_client
 
-      @client.sentry_client.capture_message('Exception in OneRoster::Connection', **{ extra: payload })
+      @client.sentry_client.capture_message(
+        'Exception in OneRoster::Connection',
+        **{ extra: payload }
+      )
     end
   end
 end
