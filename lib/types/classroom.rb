@@ -13,7 +13,9 @@ module OneRoster
                   :term_name,
                   :term_start_date,
                   :term_end_date,
-                  :term_id
+                  :term_id,
+                  :school_name,
+                  :school_uid
 
       def initialize(attributes = {})
         @uid             = attributes['id']
@@ -26,6 +28,8 @@ module OneRoster
         @term_start_date = attributes['term_start_date']
         @term_end_date   = attributes['term_end_date']
         @term_id         = attributes['term_id']
+        @school_name     = attributes['school_name']
+        @school_uid      = attributes['school_uid']
         @provider        = 'oneroster'
       end
     end

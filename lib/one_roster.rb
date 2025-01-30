@@ -23,6 +23,7 @@ require 'types/student'
 require 'types/teacher'
 require 'types/term'
 require 'types/admin'
+require 'types/school'
 
 module OneRoster
   class DistrictNotFound < StandardError; end
@@ -35,6 +36,7 @@ module OneRoster
   CLASSES_ENDPOINT           = 'ims/oneroster/v1p1/classes'
   ENROLLMENTS_ENDPOINT       = 'ims/oneroster/v1p1/enrollments'
   ACADEMIC_SESSIONS_ENDPOINT = 'ims/oneroster/v1p1/academicSessions'
+  SCHOOLS_ENDPOINT           = 'ims/oneroster/v1p1/schools'
 
   RESPONSE_TYPE_MAP = {
     'users'            => 'users',
@@ -43,6 +45,7 @@ module OneRoster
     'academicSessions' => 'academicSessions',
     'courses'          => 'courses',
     'classes'          => 'classes',
-    'enrollments'      => 'enrollments'
+    'enrollments'      => 'enrollments',
+    'schools'          => 'orgs'
   }.freeze
 end

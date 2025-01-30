@@ -48,10 +48,18 @@ module OneRoster
       records.select { |record| record_uids_set.include?(record.uid) }
     end
 
+    def schools
+      authenticate
+
+      Paginator.fetch(connection, SCHOOLS_ENDPOINT,
+                      :get, Types::School, client: self).force
+    end
+
     def classrooms(course_codes = [])
       authenticate
 
       oneroster_classes = classes
+      fetched_schools = schools
 
       terms_hash = terms.each_with_object({}) { |term, terms| terms[term.uid] = term }
 
@@ -62,6 +70,7 @@ module OneRoster
         next unless course
 
         term = terms_hash[oneroster_class.term_id&.first]
+        school = fetched_schools.find { |school| school.uid == oneroster_class.school_uid }
 
         oneroster_classes << Types::Classroom.new(
           'id' => oneroster_class.uid,
@@ -73,7 +82,9 @@ module OneRoster
           'term_name' => term&.name,
           'term_start_date' => term&.start_date,
           'term_end_date' => term&.end_date,
-          'term_id' => oneroster_class.term_id
+          'term_id' => oneroster_class.term_id,
+          'school_name' => school&.name,
+          'school_uid' => school&.uid
         )
       end
     end

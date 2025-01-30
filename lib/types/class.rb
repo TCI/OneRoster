@@ -10,7 +10,8 @@ module OneRoster
                   :period,
                   :grades,
                   :subjects,
-                  :term_id
+                  :term_id,
+                  :school_uid
 
       def initialize(attributes = {}, *)
         @uid        = attributes['sourcedId']
@@ -21,6 +22,7 @@ module OneRoster
         @grades     = presence(attributes['grades']) || []
         @subjects   = presence(attributes['subjects']) || []
         @term_id    = attributes.dig('terms')&.map { |term| term['sourcedId'] } || []
+        @school_uid = attributes.dig('school', 'sourcedId')
         @provider   = 'oneroster'
       end
 
