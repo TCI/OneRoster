@@ -11,7 +11,7 @@ module OneRoster
                   :begin_date,
                   :end_date
 
-      def initialize(attributes = {}, *)
+      def initialize(attributes = {}, client: nil)
         @uid           = attributes['sourcedId']
         # allow instantiation with classroom_uid and user_uid attrs for consistency with clever
         @classroom_uid = attributes['classroom_uid'] || attributes.dig('class', 'sourcedId')
@@ -20,6 +20,7 @@ module OneRoster
         @primary       = attributes['primary']
         @begin_date    = presence(attributes['beginDate'])
         @end_date      = presence(attributes['endDate'])
+        @client        = client
         @provider      = 'oneroster'
       end
 
@@ -42,6 +43,7 @@ module OneRoster
       end
 
       def in_term?
+        return true unless @client&.only_provision_current_terms
         return true if begin_date.nil? && end_date.nil?
         return Time.parse(begin_date) < Time.now if !begin_date.nil? && end_date.nil?
         return Time.parse(end_date) > Time.now if !end_date.nil? && begin_date.nil?
