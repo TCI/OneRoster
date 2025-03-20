@@ -24,6 +24,10 @@ module OneRoster
       @status == 200
     end
 
+    def timed_out?
+      @status == 504
+    end
+
     private
 
     def resource_type(faraday_response)
