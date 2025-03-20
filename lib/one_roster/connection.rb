@@ -24,7 +24,7 @@ module OneRoster
           'response.http_status' => response.status,
           'response.raw_body' => response.raw_body
         )
-        raise if response.status == 504
+        raise GatewayTimeoutError if response.status == 504
       end
 
       response
@@ -114,5 +114,7 @@ module OneRoster
         **{ extra: payload }
       )
     end
+
+    class GatewayTimeoutError < StandardError; end
   end
 end
