@@ -97,6 +97,7 @@ RSpec.describe OneRoster::Connection do
 
     context '504 response' do
       subject { connection.execute('/teachers', :get, limit: OneRoster::PAGE_LIMIT) }
+
       let(:status) { 504 }
       let(:body) { 'Gateway Timeout' }
 
