@@ -183,7 +183,6 @@ module OneRoster
 
       enrollments.each_with_object(teacher: [], student: []) do |enrollment, enrollments|
         next if classroom_uids.any? && !classroom_uids.include?(enrollment.classroom_uid)
-        next unless enrollment.in_term?
 
         enrollments[enrollment.role.to_sym] << enrollment if enrollment.valid?
       end
