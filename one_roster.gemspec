@@ -32,13 +32,16 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'faraday'
-  spec.add_runtime_dependency 'faraday_middleware'
+  spec.add_runtime_dependency 'base64'
+  spec.add_runtime_dependency 'ostruct'
+  spec.add_runtime_dependency 'faraday', '~> 2.13', '< 3.0'
   spec.add_runtime_dependency 'dry-inflector', '~> 1.0.0'
-  spec.add_runtime_dependency 'simple_oauth'
-  spec.add_runtime_dependency 'oauth'
+  spec.add_runtime_dependency 'simple_oauth', '~> 0.3.1'
+  spec.add_runtime_dependency 'oauth', '~> 1.1'
+  spec.add_runtime_dependency 'faraday-oauth', '~> 0.1.1'
 
-  spec.add_development_dependency 'bundler', '~> 2.1.4'
+
+  spec.add_development_dependency 'bundler', '~> 2.6.9'
   spec.add_development_dependency 'mocha'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'pry-nav'
