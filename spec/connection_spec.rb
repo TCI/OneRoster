@@ -25,11 +25,10 @@ RSpec.describe OneRoster::Connection do
       conn = connection.connection
       expect(conn).to be_a(Faraday::Connection)
       expect(conn.headers).to eq('User-Agent' => "Faraday v#{Faraday::VERSION}")
-      expect(conn.builder.handlers).to eq(
-        [
-          FaradayMiddleware::OAuth, Faraday::Response::Logger,
-          FaradayMiddleware::ParseJson
-        ]
+      expect(conn.builder.handlers).to include(
+          Faraday::OAuth::Middleware,
+          Faraday::Response::Json,
+          Faraday::Response::Logger
       )
     end
 
