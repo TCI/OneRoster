@@ -6,7 +6,8 @@ module OneRoster
       attr_reader :uid,
                   :first_name,
                   :last_name,
-                  :provider
+                  :provider,
+                  :api_username,
 
       def initialize(attributes = {}, client: nil)
         @uid          = attributes['sourcedId']
@@ -31,7 +32,8 @@ module OneRoster
           first_name: @first_name,
           last_name: @last_name,
           username: @username,
-          provider: @provider
+          provider: @provider,
+          api_username: @api_username,
         }
       end
 
