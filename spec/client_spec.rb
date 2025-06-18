@@ -664,6 +664,7 @@ RSpec.describe OneRoster::Client do
           email: teacher_1['email'],
           first_name: teacher_1['givenName'],
           last_name: teacher_1['familyName'],
+          api_username: teacher_1['username'],
           username: nil,
           provider: 'oneroster'
         )

@@ -6,14 +6,12 @@ module OneRoster
       attr_reader :uid,
                   :first_name,
                   :last_name,
-                  :provider,
-                  :api_username,
+                  :provider
 
       def initialize(attributes = {}, client: nil)
         @uid          = attributes['sourcedId']
         @first_name   = attributes['givenName']
         @last_name    = attributes['familyName']
-        @api_username = attributes['username']
         @status       = attributes['status']
         @email        = attributes['email']
         @username     = username(client)
@@ -32,8 +30,7 @@ module OneRoster
           first_name: @first_name,
           last_name: @last_name,
           username: @username,
-          provider: @provider,
-          api_username: @api_username,
+          provider: @provider
         }
       end
 
