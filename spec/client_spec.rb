@@ -67,12 +67,14 @@ RSpec.describe OneRoster::Client do
         expect(first_student.first_name).to eq(student_1['givenName'])
         expect(first_student.last_name).to eq(student_1['familyName'])
         expect(first_student.username).to eq(student_1['sourcedId'])
+        expect(first_student.email).to eq(student_1['email'])
         expect(first_student.provider).to eq('oneroster')
 
         expect(second_student).to be_a(OneRoster::Types::Student)
         expect(second_student.uid).to eq(student_3['sourcedId'])
         expect(second_student.first_name).to eq(student_3['givenName'])
         expect(second_student.last_name).to eq(student_3['familyName'])
+        expect(second_student.email).to eq(student_3['email'])
         expect(second_student.username).to eq(student_3['email'])
         expect(second_student.provider).to eq('oneroster')
       end
@@ -691,7 +693,10 @@ RSpec.describe OneRoster::Client do
           first_name: student_1['givenName'],
           last_name: student_1['familyName'],
           username: student_1['sourcedId'],
-          provider: 'oneroster'
+          provider: 'oneroster',
+          email: student_1['email'],
+          grades: student_1['grades'],
+          tenant_id: nil
         )
       end
     end
