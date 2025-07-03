@@ -6,17 +6,22 @@ module OneRoster
       attr_reader :uid,
                   :first_name,
                   :last_name,
-                  :provider
+                  :username,
+                  :provider,
+                  :email,
+                  :grades,
+                  :tenant_id
 
       def initialize(attributes = {}, client: nil)
         @uid          = attributes['sourcedId']
         @first_name   = attributes['givenName']
         @last_name    = attributes['familyName']
-        @api_username = attributes['username']
         @status       = attributes['status']
         @email        = attributes['email']
         @username     = username(client)
         @provider     = 'oneroster'
+        @grades       = attributes['grades']
+        @tenant_id    = attributes.dig("orgs", 0, "sourcedId")
       end
 
       def username(client = nil)
@@ -31,8 +36,11 @@ module OneRoster
           first_name: @first_name,
           last_name: @last_name,
           username: @username,
-          provider: @provider
-        }
+          provider: @provider,
+          email: @email,
+          grades: @grades,
+          tenant_id: @tenant_id
+}
       end
 
       private

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'faraday/oauth'
 
 module OneRoster
   class Connection
@@ -31,7 +32,8 @@ module OneRoster
     end
 
     def set_auth_headers(token, cookie)
-      connection.authorization :Bearer, token
+      # connection.authorization :Bearer, token
+      connection.headers['Authorization'] = "Bearer #{token}"
       @cookie = cookie
     end
 
@@ -89,21 +91,22 @@ module OneRoster
         connection.request :oauth,
                            consumer_key: @client.app_id,
                            consumer_secret: @client.app_secret
-        connection.response :logger, @client.logger if @client.logger
         connection.response :json, content_type: /\bjson$/
+        connection.response :logger, @client.logger if @client.logger
         connection.adapter Faraday.default_adapter
       end
     end
 
     def oauth2_connection
-      connection = Faraday.new(@client.api_url) do |connection|
+      Faraday.new(@client.api_url) do |connection|
         connection.request :json
+        connection.request :authorization, :basic,
+                                @client.app_id, @client.app_secret
+
         connection.response :logger, @client.logger if @client.logger
         connection.response :json, content_type: /\bjson$/
         connection.adapter Faraday.default_adapter
       end
-      connection.basic_auth(@client.app_id, @client.app_secret)
-      connection
     end
 
     def log_to_sentry(payload)
