@@ -436,6 +436,7 @@ RSpec.describe OneRoster::Client do
       mock_request(OneRoster::CLASSES_ENDPOINT, classes_response)
       mock_request(OneRoster::COURSES_ENDPOINT, courses_response)
       mock_request(OneRoster::ACADEMIC_SESSIONS_ENDPOINT, terms_response)
+      mock_request(OneRoster::SCHOOLS_ENDPOINT, schools_response)
     end
 
     context 'without course_codes passed in' do

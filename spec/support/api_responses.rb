@@ -259,6 +259,7 @@ RSpec.shared_context 'api responses' do
     {
       'sourcedId' => 'class_1',
       'course' => { 'sourcedId' => course_1['sourcedId'] },
+      'school' => { 'sourcedId' => school_1['sourcedId'] },
       'status' => 'active',
       'title' => 'SOC STUDIES 3 - B. julez',
       'periods' => %w(1 2),
@@ -286,6 +287,7 @@ RSpec.shared_context 'api responses' do
     {
       'sourcedId' => 'class_3',
       'course' => { 'sourcedId' => course_3['sourcedId'] },
+      'school' => { 'sourcedId' => school_1['sourcedId'] },
       'status' => 'active',
       'title' => 'meme studies 3 - b. julez',
       'classCode' => 'meme studies 3 - Period 3 - Julius',
@@ -352,6 +354,21 @@ RSpec.shared_context 'api responses' do
   let(:courses_body) { { 'courses' => [course_1, course_2, course_3, course_4] } }
   let(:courses_response) do
     OneRoster::Response.new(stub(body: courses_body, status: status, env: stub(url: courses_response_url), headers: {}))
+  end
+
+  #################################### SCHOOLS RESPONSE #####################################
+  let(:school_1) do
+    {
+      'sourcedId' => 'school_1',
+      'name' => 'Test School',
+      'identifier' => 'TS001'
+    }
+  end
+
+  let(:schools_response_url) { stub(path: OneRoster::SCHOOLS_ENDPOINT) }
+  let(:schools_body) { { 'orgs' => [school_1] } }
+  let(:schools_response) do
+    OneRoster::Response.new(stub(body: schools_body, status: status, env: stub(url: schools_response_url), headers: {}))
   end
 
   ################################### PAGINATION RESPONSE ###################################
