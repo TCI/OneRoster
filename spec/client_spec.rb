@@ -148,6 +148,59 @@ RSpec.describe OneRoster::Client do
         end
       end
     end
+
+    context 'with username replacement' do
+      let(:student_username_search_for) { '@school.com' }
+      let(:student_username_replace_with) { '' }
+
+      context 'when username contains search string' do
+        let(:username_source) { 'email' }
+
+        it 'replaces the search string with replacement string' do
+          response = client.students
+
+          first_student = response[0]
+          expect(first_student.username).to eq(student_1['sourcedId'])
+
+          second_student = response[1]
+          expect(second_student.username).to eq('meh')
+
+          third_student = response[2]
+          expect(third_student.username).to eq('best')
+        end
+      end
+
+      context 'when replacement string is provided' do
+        let(:student_username_search_for) { 'student' }
+        let(:student_username_replace_with) { 'pupil' }
+
+        it 'replaces search string with replacement string' do
+          response = client.students
+
+          expect(response.length).to eq(3)
+          response.each do |student|
+            if student.username&.include?('student')
+              expect(student.username).to include('pupil')
+              expect(student.username).not_to include('student')
+            end
+          end
+        end
+      end
+
+      context 'when replacement string is nil' do
+        let(:student_username_search_for) { '@' }
+        let(:student_username_replace_with) { nil }
+
+        it 'removes the search string' do
+          response = client.students
+
+          expect(response.length).to eq(3)
+          response.each do |student|
+            expect(student.username).not_to include('@') if student.username&.include?('@')
+          end
+        end
+      end
+    end
   end
 
   describe 'teachers' do
@@ -249,6 +302,53 @@ RSpec.describe OneRoster::Client do
         end
       end
     end
+
+    context 'with username replacement' do
+      let(:staffer_username_search_for) { '@gmail.com' }
+      let(:staffer_username_replace_with) { '@newdomain.com' }
+
+      context 'when username contains search string' do
+        it 'replaces the search string with replacement string' do
+          response = client.teachers
+
+          expect(response.length).to eq(2)
+          response.each do |teacher|
+            if teacher.username&.include?('@gmail.com')
+              expect(teacher.username).to include('@newdomain.com')
+              expect(teacher.username).not_to include('@gmail.com')
+            end
+          end
+        end
+      end
+
+      context 'when replacement string is empty' do
+        let(:staffer_username_search_for) { 'teacher' }
+        let(:staffer_username_replace_with) { '' }
+
+        it 'removes the search string' do
+          response = client.teachers
+
+          expect(response.length).to eq(2)
+          response.each do |teacher|
+            expect(teacher.username).not_to include('teacher') if teacher.username&.include?('teacher')
+          end
+        end
+      end
+
+      context 'when replacement string is nil' do
+        let(:staffer_username_search_for) { '@' }
+        let(:staffer_username_replace_with) { nil }
+
+        it 'removes the search string' do
+          response = client.teachers
+
+          expect(response.length).to eq(2)
+          response.each do |teacher|
+            expect(teacher.username).not_to include('@') if teacher.username&.include?('@')
+          end
+        end
+      end
+    end
   end
 
   describe 'classes' do
@@ -336,6 +436,7 @@ RSpec.describe OneRoster::Client do
       mock_request(OneRoster::CLASSES_ENDPOINT, classes_response)
       mock_request(OneRoster::COURSES_ENDPOINT, courses_response)
       mock_request(OneRoster::ACADEMIC_SESSIONS_ENDPOINT, terms_response)
+      mock_request(OneRoster::SCHOOLS_ENDPOINT, schools_response)
     end
 
     context 'without course_codes passed in' do

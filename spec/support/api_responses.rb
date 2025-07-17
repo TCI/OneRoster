@@ -11,26 +11,38 @@ RSpec.shared_context 'api responses' do
   let(:status) { 200 }
   let(:username_source) { nil }
   let(:staff_username_source) { nil }
+  let(:student_username_search_for) { nil }
+  let(:student_username_replace_with) { nil }
+  let(:staffer_username_search_for) { nil }
+  let(:staffer_username_replace_with) { nil }
   let(:empty_body) { { 'users' => [] } }
 
   let(:client) do
     OneRoster::Client.configure do |config|
-      config.app_id                = app_id
-      config.app_secret            = app_secret
-      config.api_url               = api_url
-      config.username_source       = username_source
-      config.staff_username_source = staff_username_source
+      config.app_id                         = app_id
+      config.app_secret                     = app_secret
+      config.api_url                        = api_url
+      config.username_source                = username_source
+      config.staff_username_source          = staff_username_source
+      config.student_username_search_for    = student_username_search_for
+      config.student_username_replace_with  = student_username_replace_with
+      config.staffer_username_search_for    = staffer_username_search_for
+      config.staffer_username_replace_with  = staffer_username_replace_with
     end
   end
 
   let(:oauth2_client) do
     OneRoster::Client.configure do |config|
-      config.app_id                = app_id
-      config.app_secret            = app_secret
-      config.api_url               = api_url
-      config.username_source       = username_source
-      config.staff_username_source = staff_username_source
-      config.oauth_strategy        = oauth_strategy
+      config.app_id                         = app_id
+      config.app_secret                     = app_secret
+      config.api_url                        = api_url
+      config.username_source                = username_source
+      config.staff_username_source          = staff_username_source
+      config.oauth_strategy                 = oauth_strategy
+      config.student_username_search_for    = student_username_search_for
+      config.student_username_replace_with  = student_username_replace_with
+      config.staffer_username_search_for    = staffer_username_search_for
+      config.staffer_username_replace_with  = staffer_username_replace_with
     end
   end
 
@@ -247,6 +259,7 @@ RSpec.shared_context 'api responses' do
     {
       'sourcedId' => 'class_1',
       'course' => { 'sourcedId' => course_1['sourcedId'] },
+      'school' => { 'sourcedId' => school_1['sourcedId'] },
       'status' => 'active',
       'title' => 'SOC STUDIES 3 - B. julez',
       'periods' => %w(1 2),
@@ -274,6 +287,7 @@ RSpec.shared_context 'api responses' do
     {
       'sourcedId' => 'class_3',
       'course' => { 'sourcedId' => course_3['sourcedId'] },
+      'school' => { 'sourcedId' => school_1['sourcedId'] },
       'status' => 'active',
       'title' => 'meme studies 3 - b. julez',
       'classCode' => 'meme studies 3 - Period 3 - Julius',
@@ -340,6 +354,21 @@ RSpec.shared_context 'api responses' do
   let(:courses_body) { { 'courses' => [course_1, course_2, course_3, course_4] } }
   let(:courses_response) do
     OneRoster::Response.new(stub(body: courses_body, status: status, env: stub(url: courses_response_url), headers: {}))
+  end
+
+  #################################### SCHOOLS RESPONSE #####################################
+  let(:school_1) do
+    {
+      'sourcedId' => 'school_1',
+      'name' => 'Test School',
+      'identifier' => 'TS001'
+    }
+  end
+
+  let(:schools_response_url) { stub(path: OneRoster::SCHOOLS_ENDPOINT) }
+  let(:schools_body) { { 'orgs' => [school_1] } }
+  let(:schools_response) do
+    OneRoster::Response.new(stub(body: schools_body, status: status, env: stub(url: schools_response_url), headers: {}))
   end
 
   ################################### PAGINATION RESPONSE ###################################
