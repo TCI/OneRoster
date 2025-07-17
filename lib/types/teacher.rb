@@ -22,8 +22,16 @@ module OneRoster
       end
 
       def username(client = nil)
+        return @username if defined?(@username)
+
         username_source = client&.staff_username_source
-        @username ||= presence(username_from(username_source))
+        username = presence(username_from(username_source))
+
+        if client&.staffer_username_search_for
+          username = username&.gsub(client.staffer_username_search_for, client.staffer_username_replace_with || '')
+        end
+
+        @username = username
       end
 
       def to_h
