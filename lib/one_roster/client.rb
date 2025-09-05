@@ -7,7 +7,7 @@ module OneRoster
                   :username_source, :oauth_strategy, :staff_username_source, :token_content_type,
                   :sentry_client, :only_provision_current_terms,
                   :student_username_search_for, :staffer_username_search_for,
-                  :student_username_replace_with, :staffer_username_replace_with
+                  :student_username_replace_with, :staffer_username_replace_with, :ca_cert_path
 
     attr_reader :authenticated
 

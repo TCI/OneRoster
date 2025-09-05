@@ -92,6 +92,7 @@ module OneRoster
         connection.response :logger, @client.logger if @client.logger
         connection.response :json, content_type: /\bjson$/
         connection.adapter Faraday.default_adapter
+        connection.ssl[:ca_file] = @client.ca_cert_path if @client.ca_cert_path
       end
     end
 
