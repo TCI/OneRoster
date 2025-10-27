@@ -63,6 +63,10 @@ module OneRoster
         request.headers['Content-Type']  = content_type || set_content_type
         request.headers['Cookie']        = @cookie
         request.body                     = render_body(body, content_type)
+
+        unless @client.service_account.nil?
+          request.headers['serviceAccountID'] = @client.service_account
+        end
       end
     end
 

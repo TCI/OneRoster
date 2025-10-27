@@ -7,7 +7,8 @@ module OneRoster
                   :username_source, :oauth_strategy, :staff_username_source, :token_content_type,
                   :sentry_client, :only_provision_current_terms,
                   :student_username_search_for, :staffer_username_search_for,
-                  :student_username_replace_with, :staffer_username_replace_with, :ca_cert_path
+                  :student_username_replace_with, :staffer_username_replace_with, :ca_cert_path,
+                  :service_account, :endpoint_prefix, :scope
 
     attr_reader :authenticated
 
@@ -22,11 +23,21 @@ module OneRoster
       client
     end
 
+    %i(students teachers admins courses classes enrollments academic_sessions schools).each do |record_type|
+      define_method("#{record_type}_endpoint") do
+        if endpoint_prefix.nil? || endpoint_prefix == ''
+          OneRoster.const_get("#{record_type.upcase}_ENDPOINT")
+        else
+          OneRoster.const_get("#{record_type.upcase}_ENDPOINT").gsub('ims/oneroster/', "#{endpoint_prefix}")
+        end
+      end
+    end
+
     %i(students teachers classes).each do |record_type|
       define_method(record_type) do |record_uids = []|
         authenticate
 
-        endpoint = OneRoster.const_get("#{record_type.upcase}_ENDPOINT")
+        endpoint = public_send("#{record_type}_endpoint")
 
         type = Types.const_get(Dry::Inflector.new.singularize(record_type.to_s.capitalize))
 
@@ -42,7 +53,7 @@ module OneRoster
     def admins(record_uids = [])
       authenticate
 
-      records = Paginator.fetch(connection, ADMINS_ENDPOINT, :get, Types::Admin, client: self).force
+      records = Paginator.fetch(connection, admins_endpoint, :get, Types::Admin, client: self).force
 
       return records if record_uids.empty?
 
@@ -53,7 +64,7 @@ module OneRoster
     def schools
       authenticate
 
-      Paginator.fetch(connection, SCHOOLS_ENDPOINT,
+      Paginator.fetch(connection, schools_endpoint,
                       :get, Types::School, client: self).force
     end
 
@@ -94,7 +105,7 @@ module OneRoster
     def terms
       authenticate
 
-      endpoint = OneRoster::ACADEMIC_SESSIONS_ENDPOINT
+      endpoint = academic_sessions_endpoint
 
       type = Types::Term
 
@@ -108,7 +119,7 @@ module OneRoster
 
       courses = Paginator.fetch(
         connection,
-        COURSES_ENDPOINT,
+        courses_endpoint,
         :get,
         Types::Course,
         client: self
@@ -137,7 +148,7 @@ module OneRoster
 
         set_auth_headers(response.raw_body, response.headers['set-cookie'])
       else
-        response = connection.execute(TEACHERS_ENDPOINT, :get, limit: 1)
+        response = connection.execute(teachers_endpoint, :get, limit: 1)
 
         fail ConnectionError, response.raw_body unless response.success?
       end
@@ -157,7 +168,7 @@ module OneRoster
       url = token_url || "#{api_url}/token"
 
       credential_params = { grant_type: 'client_credentials',
-                            scope: 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' }
+                            scope: scope || 'https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly' }
 
       if roster_app == 'infinite_campus'
         connection.execute(url, :post, credential_params, nil, token_content_type)
@@ -177,7 +188,7 @@ module OneRoster
     def parse_enrollments(classroom_uids = [])
       enrollments = Paginator.fetch(
         connection,
-        ENROLLMENTS_ENDPOINT,
+        enrollments_endpoint,
         :get,
         Types::Enrollment,
         client: self

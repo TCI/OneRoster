@@ -21,7 +21,7 @@ module OneRoster
           body = response.body
 
           fail "Failed to fetch #{@path}" unless response.success?
-          fail StopIteration if body.empty?
+          fail StopIteration if body.nil? || body.empty?
 
           if body.any?
             body.each do |item|
