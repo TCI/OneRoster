@@ -26,7 +26,7 @@ module OneRoster
     %i(students teachers admins courses classes enrollments academic_sessions schools).each do |record_type|
       define_method("#{record_type}_endpoint") do
         if endpoint_prefix.present?
-          OneRoster.const_get("#{record_type.upcase}_ENDPOINT").gsub('ims/oneroster/', "#{endpoint_prefix}/")
+          OneRoster.const_get("#{record_type.upcase}_ENDPOINT").gsub('ims/oneroster/', "#{endpoint_prefix}")
         else
           OneRoster.const_get("#{record_type.upcase}_ENDPOINT")
         end
@@ -53,7 +53,7 @@ module OneRoster
     def admins(record_uids = [])
       authenticate
 
-      records = Paginator.fetch(connection, ADMINS_ENDPOINT, :get, Types::Admin, client: self).force
+      records = Paginator.fetch(connection, admins_endpoint, :get, Types::Admin, client: self).force
 
       return records if record_uids.empty?
 
@@ -105,7 +105,7 @@ module OneRoster
     def terms
       authenticate
 
-      endpoint = OneRoster::ACADEMIC_SESSIONS_ENDPOINT
+      endpoint = academic_sessions_endpoint
 
       type = Types::Term
 
