@@ -64,7 +64,7 @@ module OneRoster
         request.headers['Cookie']        = @cookie
         request.body                     = render_body(body, content_type)
 
-        if @client.service_account.present?
+        if @client.service_account
           request.headers['serviceAccountID'] = @client.service_account
         end
       end
