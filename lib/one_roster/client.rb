@@ -25,10 +25,10 @@ module OneRoster
 
     %i(students teachers admins courses classes enrollments academic_sessions schools).each do |record_type|
       define_method("#{record_type}_endpoint") do
-        if endpoint_prefix
-          OneRoster.const_get("#{record_type.upcase}_ENDPOINT").gsub('ims/oneroster/', "#{endpoint_prefix}")
-        else
+        if endpoint_prefix.nil? || endpoint_prefix == ''
           OneRoster.const_get("#{record_type.upcase}_ENDPOINT")
+        else
+          OneRoster.const_get("#{record_type.upcase}_ENDPOINT").gsub('ims/oneroster/', "#{endpoint_prefix}")
         end
       end
     end
