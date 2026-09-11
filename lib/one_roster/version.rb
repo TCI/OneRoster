@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module OneRoster
-  VERSION = '2.3.26'
+  VERSION = '2.3.27'
 end
