@@ -4,11 +4,13 @@ require 'spec_helper'
 
 RSpec.describe OneRoster::Connection do
   let(:connection) { described_class.new(client) }
+  let(:oauth2_connection) { described_class.new(client, 'oauth2') }
   let(:logger) { stub('Logger') }
   let(:app_id) { 'app_id' }
   let(:app_secret) { 'app_secret' }
   let(:api_url) { 'https://bjulez.oneroster.com/' }
   let(:sentry_client) { nil }
+  let(:ca_cert_path) { nil }
 
   let(:client) do
     OneRoster::Client.configure do |config|
@@ -17,6 +19,7 @@ RSpec.describe OneRoster::Connection do
       config.api_url    = api_url
       config.logger     = logger
       config.sentry_client = sentry_client
+      config.ca_cert_path = ca_cert_path
     end
   end
 
@@ -36,6 +39,28 @@ RSpec.describe OneRoster::Connection do
     it 'memoizes the connection' do
       conn = connection.connection
       expect(connection.connection).to eq(conn)
+    end
+
+    context 'when no ca_cert_path is configured' do
+      it 'leaves the oauth connection using the default cert store' do
+        expect(connection.connection.ssl[:ca_file]).to be_nil
+      end
+
+      it 'leaves the oauth2 connection using the default cert store' do
+        expect(oauth2_connection.connection.ssl[:ca_file]).to be_nil
+      end
+    end
+
+    context 'when a ca_cert_path is configured' do
+      let(:ca_cert_path) { '/var/web/plato/cacert.pem' }
+
+      it 'points the oauth connection at the configured bundle' do
+        expect(connection.connection.ssl[:ca_file]).to eq(ca_cert_path)
+      end
+
+      it 'points the oauth2 connection at the configured bundle' do
+        expect(oauth2_connection.connection.ssl[:ca_file]).to eq(ca_cert_path)
+      end
     end
   end
 
